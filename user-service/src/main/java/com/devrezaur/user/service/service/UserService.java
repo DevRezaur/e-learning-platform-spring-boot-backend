@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
+
+import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_EMAIL_REGEX;
 
 @Service
 public class UserService {
@@ -21,11 +24,23 @@ public class UserService {
         return userRepository.findByUserId(userId);
     }
 
-    public List<User> getAllUser() {
+    public List<User> getAllRegularUser() {
         return userRepository.findByRole(Role.USER);
     }
 
-    public void addUser(User user) {
+    public List<User> getAllAdminUser() {
+        return userRepository.findByRole(Role.ADMIN);
+    }
+
+    public void addUser(User user) throws Exception {
+        boolean isEmailValid = isEmailValid(user.getEmail());
+        if (!isEmailValid) {
+            throw new Exception("Email id - " + user.getEmail() + " is not valid!");
+        }
+        User existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser != null) {
+            throw new Exception("User with email id - " + user.getEmail() + " already exists!");
+        }
         userRepository.save(user);
     }
 
@@ -39,6 +54,10 @@ public class UserService {
         updatedUser.setGender(user.getGender());
         updatedUser.setDateOfBirth(user.getDateOfBirth());
         userRepository.save(updatedUser);
+    }
+
+    private boolean isEmailValid(String email) {
+        return Pattern.compile(VALID_EMAIL_REGEX).matcher(email).matches();
     }
 
 }
