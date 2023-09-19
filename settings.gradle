@@ -1,1 +1,3 @@
 rootProject.name = 'e-learning-platform-spring-boot'
+include 'common-module'
+
