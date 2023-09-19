@@ -4,8 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Changed gradle wrapper version">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Misc updated">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/config/CustomRequestFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/constant/CommonConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/user-service/e-learning-platform-spring-boot.user-service.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/user-service/e-learning-platform-spring-boot.user-service.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/model/CustomHttpResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/model/CustomHttpResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/UserServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/UserServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/controller/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,9 +97,11 @@
     "jdk.selected.JAVA_MODULE": "17",
     "last_opened_file_path": "/home/rezaur-rahman/Projects/e-learning-platform-spring-boot-backend",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.sourceCode",
-    "spring.configuration.checksum": "9384fad6b5001f1f7d95873d4556d0f9",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "editor.preferences.smartKeys",
+    "spring.configuration.checksum": "8addd4bd31a32981f04a23acd349696d",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -158,9 +169,17 @@
       <option name="presentableId" value="Default" />
       <updated>1695102908300</updated>
       <workItem from="1695102909570" duration="10058000" />
-      <workItem from="1695128581758" duration="47000" />
+      <workItem from="1695128581758" duration="5692000" />
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Misc updated">
+      <option name="closed" value="true" />
+      <created>1695128679740</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1695128679740</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -170,7 +189,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Added common-module" />
     <MESSAGE value="Changed gradle wrapper version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed gradle wrapper version" />
+    <MESSAGE value="Misc updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="Misc updated" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

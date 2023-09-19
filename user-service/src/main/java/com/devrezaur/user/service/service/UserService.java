@@ -3,7 +3,6 @@ package com.devrezaur.user.service.service;
 import com.devrezaur.user.service.model.Role;
 import com.devrezaur.user.service.model.User;
 import com.devrezaur.user.service.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User getUser(UUID userId) {
         return userRepository.findByUserId(userId);
