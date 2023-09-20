@@ -1,14 +1,16 @@
 package com.devrezaur.common.module.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomHttpResponse {
     private HttpStatus httpStatus;

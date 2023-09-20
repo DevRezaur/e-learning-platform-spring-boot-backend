@@ -4,16 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Removed null response field from CustomHttpResponse">
-      <change afterPath="$PROJECT_DIR$/content-delivery-service/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/content-delivery-service/build.gradle" afterDir="false" />
+    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Added content delivery service module">
+      <change afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/logger/LoggerConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/content-delivery-service/src/main/java/com/devrezaur/content/delivery/module/ContentDeliveryServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/content-delivery-service/src/main/java/com/devrezaur/content/delivery/module/controller/ContentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/content-delivery-service/src/main/java/com/devrezaur/content/delivery/module/service/ContentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/content-delivery-service/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/content-delivery-service/src/main/resources/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/content-delivery-service/api.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/content-delivery-service/system.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/user-service/api.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/user-service/info.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/user-service/system.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/common-module/e-learning-platform-spring-boot.common-module.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/common-module/e-learning-platform-spring-boot.common-module.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/config/CustomRequestFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/config/CustomRequestFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/model/CustomHttpResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/model/CustomHttpResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common-module/src/main/resources/logback-common.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/resources/logback-common.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/content-delivery-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/content-delivery-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/user-service.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +106,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
     "jdk.selected.JAVA_MODULE": "17",
-    "last_opened_file_path": "/home/bjit/Projects/e-learning-platform-spring-boot/user-service/src/main/resources",
+    "last_opened_file_path": "/home/bjit/Projects/e-learning-platform-spring-boot/content-delivery-service/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -106,12 +118,21 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/content-delivery-service/src/main/resources" />
       <recent name="$PROJECT_DIR$/user-service/src/main/resources" />
       <recent name="$PROJECT_DIR$/common-module/src/main/resources" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.devrezaur.content.delivery.module" />
       <recent name="com.devrezaur.common.module.model" />
     </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
   </component>
   <component name="RunManager" selected="Spring Boot.UserServiceApplication">
     <configuration name="e-learning-platform-spring-boot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -136,6 +157,19 @@
       <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
+    <configuration name="ContentDeliveryServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="e-learning-platform-spring-boot.content-delivery-service.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.devrezaur.content.delivery.module.ContentDeliveryServiceApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.devrezaur.content.delivery.module.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="UserServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="e-learning-platform-spring-boot.user-service.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.devrezaur.user.service.UserServiceApplication" />
@@ -145,6 +179,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.ContentDeliveryServiceApplication" />
         <item itemvalue="Gradle.e-learning-platform-spring-boot [build]" />
       </list>
     </recent_temporary>
@@ -218,7 +253,14 @@
       <option name="project" value="LOCAL" />
       <updated>1695186412997</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added content delivery service module">
+      <created>1695187192801</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1695187192801</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -233,7 +275,8 @@
     <MESSAGE value="Updated OncePerRequestFilter" />
     <MESSAGE value="Add logging support for request response" />
     <MESSAGE value="Removed null response field from CustomHttpResponse" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed null response field from CustomHttpResponse" />
+    <MESSAGE value="Added content delivery service module" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added content delivery service module" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

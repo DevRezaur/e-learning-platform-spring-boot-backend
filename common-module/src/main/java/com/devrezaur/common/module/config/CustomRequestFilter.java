@@ -1,5 +1,6 @@
 package com.devrezaur.common.module.config;
 
+import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,7 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -23,7 +25,13 @@ import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
 @Component
 public class CustomRequestFilter extends OncePerRequestFilter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomRequestFilter.class);
+    private final Logger apiLogger;
+    private final Logger systemLogger;
+
+    public CustomRequestFilter(@Qualifier("apiLogger") Logger logger, @Qualifier("systemLogger") Logger systemLogger) {
+        this.apiLogger = logger;
+        this.systemLogger = systemLogger;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -47,17 +55,35 @@ public class CustomRequestFilter extends OncePerRequestFilter {
                                     ContentCachingResponseWrapper responseWrapper) {
         String requestBody = getStringValue(requestWrapper.getContentAsByteArray(), request.getCharacterEncoding());
         String responseBody = getStringValue(responseWrapper.getContentAsByteArray(), response.getCharacterEncoding());
-        LOGGER.info("FINISHED PROCESSING: REQUEST_ID={}, METHOD={}, REQUEST_URI={}, REQUEST_PAYLOAD={}, " +
-                        "RESPONSE_CODE={}, RESPONSE={}, TIME_TAKEN={}ms", response.getHeader(REQUEST_ID),
-                request.getMethod(), request.getRequestURI(), removeWhiteSpaceFromJsonString(requestBody),
-                response.getStatus(), removeWhiteSpaceFromJsonString(responseBody), timeTaken);
+        if (getHttpStatus(responseBody).is2xxSuccessful()) {
+            apiLogger.info("FINISHED PROCESSING: REQUEST_ID={}, METHOD={}, REQUEST_URI={}, REQUEST_PAYLOAD={}, " +
+                            "RESPONSE_CODE={}, RESPONSE={}, TIME_TAKEN={}ms", response.getHeader(REQUEST_ID),
+                    request.getMethod(), request.getRequestURI(), removeWhiteSpaceFromJsonString(requestBody),
+                    response.getStatus(), removeWhiteSpaceFromJsonString(responseBody), timeTaken);
+        } else {
+            apiLogger.error("FAILED PROCESSING: REQUEST_ID={}, METHOD={}, REQUEST_URI={}, REQUEST_PAYLOAD={}, " +
+                            "RESPONSE_CODE={}, RESPONSE={}, TIME_TAKEN={}ms", response.getHeader(REQUEST_ID),
+                    request.getMethod(), request.getRequestURI(), removeWhiteSpaceFromJsonString(requestBody),
+                    response.getStatus(), removeWhiteSpaceFromJsonString(responseBody), timeTaken);
+        }
+    }
+
+    private HttpStatus getHttpStatus(String responseBody) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            CustomHttpResponse customHttpResponse = objectMapper.readValue(responseBody, CustomHttpResponse.class);
+            return customHttpResponse.getHttpStatus();
+        } catch (JsonProcessingException e) {
+            systemLogger.error("Exception occurred while parsing response status code!");
+        }
+        return HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     private String getStringValue(byte[] contentAsByteArray, String characterEncoding) {
         try {
             return new String(contentAsByteArray, characterEncoding);
         } catch (UnsupportedEncodingException ex) {
-            LOGGER.error("Exception occurred while parsing request/response body!");
+            systemLogger.error("Exception occurred while parsing request/response body!");
         }
         return "";
     }
@@ -68,7 +94,7 @@ public class CustomRequestFilter extends OncePerRequestFilter {
             JsonNode jsonNode = objectMapper.readTree(jsonString);
             return objectMapper.writeValueAsString(jsonNode);
         } catch (JsonProcessingException ex) {
-            LOGGER.error("Exception occurred while parsing json string!");
+            systemLogger.error("Exception occurred while parsing json string!");
         }
         return "";
     }

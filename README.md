@@ -11,3 +11,8 @@
 * Get all admin user info
 * Update profile picture
 * Update profile information
+
+# Content Delivery Service
+
+* Store files in the file system
+* Retrieve files from file system

@@ -80,7 +80,7 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping()
+    @GetMapping
     public CustomHttpResponse getAllRegularUser() {
         List<User> userList = userService.getAllRegularUser();
         return CustomHttpResponse
@@ -120,7 +120,7 @@ public class UserController {
     }
 
     @PostMapping("/image")
-    public ResponseEntity<?> updatePhoto(@RequestBody UUID userId, @RequestBody String imageUrl) {
+    public ResponseEntity<?> updatePhoto(@RequestParam UUID userId, @RequestParam String imageUrl) {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
