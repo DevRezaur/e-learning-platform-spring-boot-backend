@@ -48,7 +48,7 @@ public class CustomRequestFilter extends OncePerRequestFilter {
         try {
             return new String(contentAsByteArray, characterEncoding);
         } catch (UnsupportedEncodingException ex) {
-            ex.printStackTrace();
+            LOGGER.error("CustomRequestFilter: Exception occurred while parsing request/response body");
         }
         return "";
     }
