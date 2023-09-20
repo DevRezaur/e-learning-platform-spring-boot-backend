@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Added global exception handler">
+    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Updated OncePerRequestFilter">
+      <change afterPath="$PROJECT_DIR$/common-module/src/main/resources/logback-common.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/user-service.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user-service/src/main/resources/logback.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/config/CustomRequestFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/config/CustomRequestFilter.java" afterDir="false" />
     </list>
@@ -73,31 +76,35 @@
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/rezaur-rahman/Projects/e-learning-platform-spring-boot-backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.smartKeys&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;8addd4bd31a32981f04a23acd349696d&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "jdk.selected.JAVA_MODULE": "17",
+    "last_opened_file_path": "/home/bjit/Projects/e-learning-platform-spring-boot/user-service/src/main/resources",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "editor.preferences.smartKeys",
+    "spring.configuration.checksum": "8addd4bd31a32981f04a23acd349696d",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/user-service/src/main/resources" />
+      <recent name="$PROJECT_DIR$/common-module/src/main/resources" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.devrezaur.common.module.model" />
     </key>
@@ -179,7 +186,21 @@
       <option name="project" value="LOCAL" />
       <updated>1695134611514</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Updated OncePerRequestFilter">
+      <created>1695181994650</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1695181994650</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Updated OncePerRequestFilter">
+      <created>1695182106213</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1695182106213</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,7 +212,8 @@
     <MESSAGE value="Changed gradle wrapper version" />
     <MESSAGE value="Misc updated" />
     <MESSAGE value="Added global exception handler" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added global exception handler" />
+    <MESSAGE value="Updated OncePerRequestFilter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated OncePerRequestFilter" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
