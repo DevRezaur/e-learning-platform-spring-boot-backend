@@ -4,12 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Updated OncePerRequestFilter">
-      <change afterPath="$PROJECT_DIR$/common-module/src/main/resources/logback-common.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/user-service.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user-service/src/main/resources/logback.xml" afterDir="false" />
+    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Removed null response field from CustomHttpResponse">
+      <change afterPath="$PROJECT_DIR$/content-delivery-service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/content-delivery-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/common-module/e-learning-platform-spring-boot.common-module.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/common-module/e-learning-platform-spring-boot.common-module.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/config/CustomRequestFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/config/CustomRequestFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,7 +204,21 @@
       <option name="project" value="LOCAL" />
       <updated>1695182106213</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Add logging support for request response">
+      <created>1695186259273</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1695186259273</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Removed null response field from CustomHttpResponse">
+      <created>1695186412997</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1695186412997</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -213,7 +231,9 @@
     <MESSAGE value="Misc updated" />
     <MESSAGE value="Added global exception handler" />
     <MESSAGE value="Updated OncePerRequestFilter" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated OncePerRequestFilter" />
+    <MESSAGE value="Add logging support for request response" />
+    <MESSAGE value="Removed null response field from CustomHttpResponse" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed null response field from CustomHttpResponse" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

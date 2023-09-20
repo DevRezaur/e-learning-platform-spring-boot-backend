@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common-module/e-learning-platform-spring-boot.common-module.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common-module/e-learning-platform-spring-boot.common-module.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service/e-learning-platform-spring-boot.user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service/e-learning-platform-spring-boot.user-service.main.iml" />
     </modules>
   </component>

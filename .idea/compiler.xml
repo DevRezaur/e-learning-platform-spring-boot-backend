@@ -10,6 +10,7 @@
         </processorPath>
         <module name="e-learning-platform-spring-boot.common-module.main" />
         <module name="e-learning-platform-spring-boot.user-service.main" />
+        <module name="e-learning-platform-spring-boot.content-delivery-service.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17" />
