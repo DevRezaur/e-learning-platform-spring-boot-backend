@@ -167,3 +167,36 @@
 2023-09-20 11:03:44 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2023-09-20 11:03:44 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2023-09-20 11:03:44 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2023-09-20 11:06:01 [main] INFO  c.d.u.service.UserServiceApplication - Starting UserServiceApplication using Java 17.0.7 with PID 80800 (/home/bjit/Projects/e-learning-platform-spring-boot/user-service/build/classes/java/main started by bjit in /home/bjit/Projects/e-learning-platform-spring-boot)
+2023-09-20 11:06:01 [main] INFO  c.d.u.service.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2023-09-20 11:06:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-09-20 11:06:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 28 ms. Found 1 JPA repository interfaces.
+2023-09-20 11:06:02 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+2023-09-20 11:06:02 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+2023-09-20 11:06:02 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2023-09-20 11:06:02 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.12]
+2023-09-20 11:06:02 [main] INFO  o.a.c.c.C.[.[.[/user-service] - Initializing Spring embedded WebApplicationContext
+2023-09-20 11:06:02 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 734 ms
+2023-09-20 11:06:02 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2023-09-20 11:06:02 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:user-service-db user=ROOT
+2023-09-20 11:06:02 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2023-09-20 11:06:02 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:user-service-db'
+2023-09-20 11:06:02 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-09-20 11:06:02 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.2.7.Final
+2023-09-20 11:06:02 [main] INFO  org.hibernate.cfg.Environment - HHH000406: Using bytecode reflection optimizer
+2023-09-20 11:06:02 [main] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2023-09-20 11:06:02 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-09-20 11:06:02 [main] INFO  o.h.b.i.BytecodeProviderInitiator - HHH000021: Bytecode provider name : bytebuddy
+2023-09-20 11:06:02 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-09-20 11:06:02 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-09-20 11:06:03 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+2023-09-20 11:06:03 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path '/user-service'
+2023-09-20 11:06:03 [main] INFO  c.d.u.service.UserServiceApplication - Started UserServiceApplication in 2.215 seconds (process running for 2.559)
+2023-09-20 11:06:06 [http-nio-8081-exec-2] INFO  o.a.c.c.C.[.[.[/user-service] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-20 11:06:06 [http-nio-8081-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2023-09-20 11:06:06 [http-nio-8081-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2023-09-20 11:06:06 [http-nio-8081-exec-2] INFO  c.d.c.m.config.CustomRequestFilter - FINISHED PROCESSING: REQUEST_ID=5a289c03-aaf5-49ab-9a46-19e919ae8bf4, METHOD=GET, REQUEST_URI=/user-service/user, REQUEST_PAYLOAD=null, RESPONSE_CODE=200, RESPONSE={"httpStatus":"OK","responseBody":{"userList":[]}}, TIME_TAKEN=130ms
+2023-09-20 11:06:10 [http-nio-8081-exec-3] INFO  c.d.c.m.config.CustomRequestFilter - FINISHED PROCESSING: REQUEST_ID=39faef8d-2544-4579-b838-4f8eacbd00d7, METHOD=POST, REQUEST_URI=/user-service/user, REQUEST_PAYLOAD={"firstName":"Rezaur Rahman","lastName":"Rahman","email":"user1@gmail.com"}, RESPONSE_CODE=200, RESPONSE={"httpStatus":"CREATED","responseBody":{"message":"Successfully added user"}}, TIME_TAKEN=50ms
+2023-09-20 11:06:23 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-09-20 11:06:23 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2023-09-20 11:06:23 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
