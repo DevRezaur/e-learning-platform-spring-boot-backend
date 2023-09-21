@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Updated logging mechanism">
+    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Updated log config to log requestId">
+      <change afterPath="$PROJECT_DIR$/logs/user-service/api.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/user-service/info.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logs/user-service/system.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/config/CustomRequestFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/config/CustomRequestFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common-module/src/main/resources/logback-common.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/resources/logback-common.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/user-service/api.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/user-service/api.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/user-service/info.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/user-service/info.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -251,7 +252,14 @@
       <option name="project" value="LOCAL" />
       <updated>1695202888909</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Updated log config to log requestId">
+      <created>1695263597691</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1695263597691</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -268,7 +276,8 @@
     <MESSAGE value="Removed null response field from CustomHttpResponse" />
     <MESSAGE value="Added content delivery service module" />
     <MESSAGE value="Updated logging mechanism" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated logging mechanism" />
+    <MESSAGE value="Updated log config to log requestId" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated log config to log requestId" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
