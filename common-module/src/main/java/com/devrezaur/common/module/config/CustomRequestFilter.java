@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -41,6 +42,7 @@ public class CustomRequestFilter extends OncePerRequestFilter {
         } else {
             response.addHeader(REQUEST_ID, request.getHeader(REQUEST_ID));
         }
+        MDC.put(REQUEST_ID, response.getHeader(REQUEST_ID));
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
         long startTime = System.currentTimeMillis();
