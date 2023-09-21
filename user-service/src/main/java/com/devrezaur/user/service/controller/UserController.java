@@ -1,6 +1,7 @@
 package com.devrezaur.user.service.controller;
 
 import com.devrezaur.common.module.model.CustomHttpResponse;
+import com.devrezaur.common.module.util.ResponseBuilder;
 import com.devrezaur.user.service.model.Role;
 import com.devrezaur.user.service.model.User;
 import com.devrezaur.user.service.service.UserService;
@@ -23,100 +24,61 @@ public class UserController {
     }
 
     @PostMapping
-    public CustomHttpResponse addRegularUser(@RequestBody User user) {
+    public ResponseEntity<CustomHttpResponse> addRegularUser(@RequestBody User user) {
         try {
             user.setRole(Role.USER);
             userService.addUser(user);
         } catch (Exception ex) {
-            return CustomHttpResponse
-                    .builder()
-                    .httpStatus(HttpStatus.BAD_REQUEST)
-                    .customErrorCode("400")
-                    .errorMessage("Failed to add user! Reason: " + ex.getMessage())
-                    .build();
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to add user! Reason: " + ex.getMessage());
         }
-        return CustomHttpResponse
-                .builder()
-                .httpStatus(HttpStatus.CREATED)
-                .responseBody(Map.of("message", "Successfully added user"))
-                .build();
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", "Successfully added user"));
     }
 
     @PostMapping("/admin")
-    public CustomHttpResponse addAdminUser(@RequestBody User user) {
+    public ResponseEntity<CustomHttpResponse> addAdminUser(@RequestBody User user) {
         try {
             user.setRole(Role.ADMIN);
             userService.addUser(user);
         } catch (Exception ex) {
-            return CustomHttpResponse
-                    .builder()
-                    .httpStatus(HttpStatus.BAD_REQUEST)
-                    .customErrorCode("400")
-                    .errorMessage("Failed to add admin user! Reason: " + ex.getMessage())
-                    .build();
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to add admin user! Reason: " + ex.getMessage());
         }
-        return CustomHttpResponse
-                .builder()
-                .httpStatus(HttpStatus.CREATED)
-                .responseBody(Map.of("message", "Successfully added admin user"))
-                .build();
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED,
+                Map.of("message", "Successfully added admin user"));
     }
 
     @GetMapping("/{userId}")
-    public CustomHttpResponse getUserById(@PathVariable UUID userId) {
+    public ResponseEntity<CustomHttpResponse> getUserById(@PathVariable UUID userId) {
         User user = userService.getUser(userId);
         if (user == null) {
-            return CustomHttpResponse
-                    .builder()
-                    .httpStatus(HttpStatus.NOT_FOUND)
-                    .customErrorCode("404")
-                    .errorMessage("No user found for this user id!")
-                    .build();
+            return ResponseBuilder.buildFailureResponse(HttpStatus.NOT_FOUND, "404", "No user found for this user id!");
         }
-        return CustomHttpResponse
-                .builder()
-                .httpStatus(HttpStatus.OK)
-                .responseBody(Map.of("user", user))
-                .build();
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("user", user));
     }
 
     @GetMapping
-    public CustomHttpResponse getAllRegularUser() {
+    public ResponseEntity<CustomHttpResponse> getAllRegularUser() {
         List<User> userList = userService.getAllRegularUser();
-        return CustomHttpResponse
-                .builder()
-                .httpStatus(HttpStatus.OK)
-                .responseBody(Map.of("userList", userList))
-                .build();
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
 
     @GetMapping("/admin")
-    public CustomHttpResponse getAllAdminUser() {
+    public ResponseEntity<CustomHttpResponse> getAllAdminUser() {
         List<User> userList = userService.getAllAdminUser();
-        return CustomHttpResponse
-                .builder()
-                .httpStatus(HttpStatus.OK)
-                .responseBody(Map.of("userList", userList))
-                .build();
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
 
     @PostMapping("/profile")
-    public CustomHttpResponse updateProfile(@RequestBody User user) {
+    public ResponseEntity<CustomHttpResponse> updateProfile(@RequestBody User user) {
         try {
             userService.updateUser(user);
         } catch (Exception ex) {
-            return CustomHttpResponse
-                    .builder()
-                    .httpStatus(HttpStatus.EXPECTATION_FAILED)
-                    .customErrorCode("417")
-                    .errorMessage("Failed to update user information! Reason: " + ex.getMessage())
-                    .build();
+            return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
+                    "Failed to update user information! Reason: " + ex.getMessage());
         }
-        return CustomHttpResponse
-                .builder()
-                .httpStatus(HttpStatus.OK)
-                .responseBody(Map.of("message", "Successfully updated user information"))
-                .build();
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message",
+                "Successfully updated user information"));
     }
 
     @PostMapping("/image")

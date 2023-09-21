@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Updated log config to log requestId">
-      <change afterPath="$PROJECT_DIR$/logs/user-service/api.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/user-service/info.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logs/user-service/system.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="66e8c2ec-2e87-4332-adfa-f6b2dc5ea6cb" name="Changes" comment="Updated gitignore">
+      <change afterPath="$PROJECT_DIR$/common-module/src/main/java/com/devrezaur/common/module/util/ResponseBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common-module/src/main/resources/logback-common.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common-module/src/main/resources/logback-common.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/devrezaur/user/service/controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -259,7 +256,21 @@
       <option name="project" value="LOCAL" />
       <updated>1695263597691</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Updated log config">
+      <created>1695264358233</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1695264358233</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Updated gitignore">
+      <created>1695264443034</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1695264443034</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -277,7 +288,9 @@
     <MESSAGE value="Added content delivery service module" />
     <MESSAGE value="Updated logging mechanism" />
     <MESSAGE value="Updated log config to log requestId" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated log config to log requestId" />
+    <MESSAGE value="Updated log config" />
+    <MESSAGE value="Updated gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated gitignore" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
