@@ -25,14 +25,26 @@ public class ContentService {
         this.contentRepository = contentRepository;
     }
 
-    public List<UUID> saveContents(MultipartFile[] contents) throws NoSuchAlgorithmException {
+    public List<UUID> saveContents(MultipartFile[] contents) throws Exception {
         List<UUID> contentIdList = new ArrayList<>();
+        if (!isContentListValid(contents)) {
+            throw new Exception("Please provide valid contents for upload!");
+        }
         for (MultipartFile content : contents) {
             String hash = generateHash(content.getName(), content.getContentType(), content.getSize());
             contentIdList.add(saveContentInfoToDB(content.getName(), content.getContentType(),
                     content.getSize(), hash));
         }
         return contentIdList;
+    }
+
+    private boolean isContentListValid(MultipartFile[] contents) {
+        for (MultipartFile content : contents) {
+            if (content == null || content.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private String generateHash(String contentName, String mimeType, long size) throws NoSuchAlgorithmException {

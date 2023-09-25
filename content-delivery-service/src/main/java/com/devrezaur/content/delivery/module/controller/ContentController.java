@@ -4,6 +4,7 @@ import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
 import com.devrezaur.content.delivery.module.model.Content;
 import com.devrezaur.content.delivery.module.service.ContentService;
+import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,11 @@ public class ContentController {
     }
 
     @GetMapping
-    public ResponseEntity<CustomHttpResponse> getContentsInfo(@RequestParam ArrayList<UUID> contentIds) {
+    public ResponseEntity<CustomHttpResponse> getContentsInfo(@Nullable @RequestParam ArrayList<UUID> contentIds) {
+        if (contentIds == null) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Please specify at least one contentId!");
+        }
         List<Content> contentList = contentService.getContentsInfo(contentIds);
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("contentList", contentList));
     }

@@ -12,7 +12,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomHttpResponse> handleException(Exception ex) {
-        return ResponseBuilder.buildFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, "500",
-                String.valueOf(ex.getCause()));
+        String errorMessage = null;
+        if (ex.getMessage() != null) {
+            errorMessage = ex.getMessage();
+        } else if (ex.getCause() != null) {
+            errorMessage = ex.getCause().toString();
+        }
+        return ResponseBuilder.buildFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, "500", errorMessage);
     }
 }
