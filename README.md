@@ -15,4 +15,15 @@
 # Content Delivery Service
 
 * Store files in the file system
-* Retrieve files from file system
+* Retrieve file information from the db
+
+# Course Management Service
+
+* Add course information
+* Update course information
+* Apply for course enrollment
+* Approve course enrollment request
+* Add posts to the courses
+* Upload contents to the courses
+* Fetch posts from the courses
+* Download contents from the courses
