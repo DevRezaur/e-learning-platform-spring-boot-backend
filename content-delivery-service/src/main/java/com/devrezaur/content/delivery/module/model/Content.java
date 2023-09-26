@@ -25,6 +25,9 @@ public class Content {
     @Column(name = "mime_type")
     private String mimeType;
 
+    @Column(name = "extension")
+    private String extension;
+
     @Column(name = "size")
     private long size;
 
