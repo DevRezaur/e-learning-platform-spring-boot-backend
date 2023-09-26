@@ -2,3 +2,5 @@ rootProject.name = 'e-learning-platform-spring-boot'
 include 'common-module'
 include 'user-service'
 include 'content-delivery-service'
+include 'course-management-service'
+
