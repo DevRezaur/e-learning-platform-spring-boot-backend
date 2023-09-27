@@ -1,22 +1,35 @@
 package com.devrezaur.user.service.service;
 
+import com.devrezaur.common.module.model.CustomHttpRequest;
+import com.devrezaur.common.module.model.CustomHttpResponse;
+import com.devrezaur.common.module.util.HttpCallLogic;
 import com.devrezaur.user.service.model.Role;
 import com.devrezaur.user.service.model.User;
 import com.devrezaur.user.service.repository.UserRepository;
+import org.slf4j.MDC;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import static com.devrezaur.common.module.constant.CommonConstant.CONTENT_TYPE_HEADER_KEY;
+import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
 import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_EMAIL_REGEX;
 
 @Service
 public class UserService {
 
+    private final HttpCallLogic httpCallLogic;
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(HttpCallLogic httpCallLogic, UserRepository userRepository) {
+        this.httpCallLogic = httpCallLogic;
         this.userRepository = userRepository;
     }
 
@@ -45,15 +58,34 @@ public class UserService {
     }
 
     public void updateUser(User user) throws Exception {
-        User updatedUser = userRepository.findByUserId(user.getUserId());
-        if (updatedUser == null) {
+        User existingUser = userRepository.findByUserId(user.getUserId());
+        if (existingUser == null) {
             throw new Exception("User with id - " + user.getUserId() + " not found!");
         }
-        updatedUser.setFirstName(user.getFirstName());
-        updatedUser.setLastName(user.getLastName());
-        updatedUser.setGender(user.getGender());
-        updatedUser.setDateOfBirth(user.getDateOfBirth());
-        userRepository.save(updatedUser);
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setGender(user.getGender());
+        existingUser.setDateOfBirth(user.getDateOfBirth());
+        userRepository.save(existingUser);
+    }
+
+    public void updateProfileImage(UUID userId, MultipartFile image) throws Exception {
+        User existingUser = userRepository.findByUserId(userId);
+        if (existingUser == null) {
+            throw new Exception("User with id - " + userId + " not found!");
+        }
+        CustomHttpRequest customHttpRequest = new CustomHttpRequest();
+        customHttpRequest.setRequestId(MDC.get(REQUEST_ID));
+        customHttpRequest.setMethodType(HttpMethod.POST);
+        customHttpRequest.setHeaderParameterMap(Map.of(CONTENT_TYPE_HEADER_KEY, MediaType.MULTIPART_FORM_DATA_VALUE));
+        customHttpRequest.setBodyMap(Map.of("contents", image.getResource()));
+        customHttpRequest.setUrl("http://localhost:8082/content-delivery-service/content");
+        ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            List<String> urlIds = (List<String>) responseEntity.getBody().getResponseBody().get("urlList");
+            existingUser.setImageUrl(urlIds.get(0));
+            userRepository.save(existingUser);
+        }
     }
 
     private boolean isEmailValid(String email) {

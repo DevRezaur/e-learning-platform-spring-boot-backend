@@ -8,6 +8,7 @@ import com.devrezaur.user.service.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -81,9 +82,17 @@ public class UserController {
                 "Successfully updated user information"));
     }
 
-    @PostMapping("/image")
-    public ResponseEntity<?> updatePhoto(@RequestParam UUID userId, @RequestParam String imageUrl) {
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    @PostMapping("/image/{userId}")
+    public ResponseEntity<CustomHttpResponse> updatePhoto(@PathVariable UUID userId,
+                                                          @RequestParam MultipartFile image) {
+        try {
+            userService.updateProfileImage(userId, image);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
+                    "Failed to update profile image! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message",
+                "Successfully updated profile image"));
     }
 
 }
