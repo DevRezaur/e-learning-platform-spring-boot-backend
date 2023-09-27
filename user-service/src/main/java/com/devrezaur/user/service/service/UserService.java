@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -89,6 +90,9 @@ public class UserService {
     }
 
     private boolean isEmailValid(String email) {
+        if (!StringUtils.hasLength(email)) {
+            return false;
+        }
         return Pattern.compile(VALID_EMAIL_REGEX).matcher(email).matches();
     }
 
