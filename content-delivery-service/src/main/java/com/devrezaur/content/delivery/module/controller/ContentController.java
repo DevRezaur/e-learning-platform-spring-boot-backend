@@ -2,17 +2,17 @@ package com.devrezaur.content.delivery.module.controller;
 
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
-import com.devrezaur.content.delivery.module.model.Content;
 import com.devrezaur.content.delivery.module.service.ContentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/content")
@@ -26,20 +26,14 @@ public class ContentController {
 
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<CustomHttpResponse> saveContents(@RequestParam MultipartFile[] contents) {
-        List<UUID> contentIds;
+        List<String> urlList;
         try {
-            contentIds = contentService.saveContents(contents);
+            urlList = contentService.saveContents(contents);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to save contents in the file system! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("contentIds", contentIds));
-    }
-
-    @GetMapping
-    public ResponseEntity<CustomHttpResponse> getContentsInfo(@RequestParam ArrayList<UUID> contentIds) {
-        List<Content> contentList = contentService.getContentsInfo(contentIds);
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("contentList", contentList));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("urlList", urlList));
     }
 
 }
