@@ -76,7 +76,7 @@ public class CustomRequestFilter extends OncePerRequestFilter {
             CustomHttpResponse customHttpResponse = objectMapper.readValue(responseBody, CustomHttpResponse.class);
             return customHttpResponse.getHttpStatus();
         } catch (JsonProcessingException e) {
-            systemLogger.error("Exception occurred while parsing response status code!");
+            systemLogger.error("CustomRequestFilter: Exception occurred while parsing response status code!");
         }
         return HttpStatus.INTERNAL_SERVER_ERROR;
     }
@@ -85,7 +85,7 @@ public class CustomRequestFilter extends OncePerRequestFilter {
         try {
             return new String(contentAsByteArray, characterEncoding);
         } catch (UnsupportedEncodingException ex) {
-            systemLogger.error("Exception occurred while parsing request/response body!");
+            systemLogger.error("CustomRequestFilter: Exception occurred while parsing request/response body!");
         }
         return "";
     }
@@ -96,7 +96,7 @@ public class CustomRequestFilter extends OncePerRequestFilter {
             JsonNode jsonNode = objectMapper.readTree(jsonString);
             return objectMapper.writeValueAsString(jsonNode);
         } catch (JsonProcessingException ex) {
-            systemLogger.error("Exception occurred while parsing json string!");
+            systemLogger.error("CustomRequestFilter: Exception occurred while parsing json string!");
         }
         return "";
     }

@@ -16,5 +16,6 @@ public class CustomHttpRequest {
     private HttpMethod methodType;
     private String url;
     private Map<String, String> headerParameterMap = new HashMap<>();
+    private Map<String, String> urlParameterMap = new HashMap<>();
     private Map<String, Object> bodyMap;
 }
