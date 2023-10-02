@@ -9,7 +9,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@Data
 @Entity
 @Table(name = "user_table")
 public class User {
