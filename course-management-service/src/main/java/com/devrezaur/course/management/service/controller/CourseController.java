@@ -42,7 +42,7 @@ public class CourseController {
 
     @GetMapping
     public ResponseEntity<CustomHttpResponse> getAllCourses(@RequestParam @Nullable UUID userId) {
-        List<Course> courseList = new ArrayList<>();
+        List<Course> courseList;
         if (userId != null) {
             List<UUID> enrolledCourseIds = courseEnrollmentService.getEnrolledCourseIds(userId);
             courseList = courseService.getCourses(enrolledCourseIds);
