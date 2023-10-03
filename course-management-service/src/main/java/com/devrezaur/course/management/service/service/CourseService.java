@@ -45,6 +45,7 @@ public class CourseService {
         existingCourse.setDescription(course.getDescription());
         existingCourse.setIsEnrolmentEnabled(course.getIsEnrolmentEnabled());
         existingCourse.setCourseFee(course.getCourseFee());
+        courseRepository.save(existingCourse);
     }
 
 }

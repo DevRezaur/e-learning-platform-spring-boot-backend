@@ -25,7 +25,7 @@ public class Course {
     private String description;
 
     @Column(name = "is_enrollment_enabled")
-    private String isEnrolmentEnabled;
+    private Boolean isEnrolmentEnabled;
 
     @Column(name = "course_fee")
     private Integer courseFee;

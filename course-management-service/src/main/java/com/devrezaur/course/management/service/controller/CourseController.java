@@ -62,6 +62,18 @@ public class CourseController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("course", course));
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<CustomHttpResponse> updateCourse(@RequestBody Course course) {
+        try {
+            courseService.updateCourse(course);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to update course! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED,
+                Map.of("message", "Successfully updated course info"));
+    }
+
     @PostMapping("/enroll")
     public ResponseEntity<CustomHttpResponse> enrollToCourse(@RequestBody CourseEnrollmentInfo courseEnrollmentInfo) {
         try {
