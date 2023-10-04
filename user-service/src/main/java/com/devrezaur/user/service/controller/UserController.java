@@ -70,6 +70,12 @@ public class UserController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
 
+    @PostMapping("/list")
+    public ResponseEntity<CustomHttpResponse> getListOfUser(@RequestBody Map<String, List<UUID>> userIds) {
+        List<User> userList = userService.getListOfUser(userIds.get("userIds"));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
+    }
+
     @PostMapping("/profile")
     public ResponseEntity<CustomHttpResponse> updateProfile(@RequestBody User user) {
         try {

@@ -46,6 +46,10 @@ public class UserService {
         return userRepository.findByRole(Role.ADMIN);
     }
 
+    public List<User> getListOfUser(List<UUID> userIds) {
+        return userRepository.findByUserIdIn(userIds);
+    }
+
     public void addUser(User user) throws Exception {
         boolean isEmailValid = isEmailValid(user.getEmail());
         if (!isEmailValid) {
