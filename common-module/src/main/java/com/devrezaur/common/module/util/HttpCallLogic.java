@@ -9,8 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -34,8 +32,8 @@ public class HttpCallLogic {
         URI url = prepareRequestUri(customHttpRequest);
         HttpMethod methodType = customHttpRequest.getMethodType();
         HttpHeaders requestHeaders = prepareRequestHeaders(customHttpRequest);
-        MultiValueMap<String, Object> requestBody = prepareRequestBody(customHttpRequest);
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(requestBody, requestHeaders);
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(customHttpRequest.getBodyMap(),
+                requestHeaders);
         return restTemplate.exchange(url, methodType, requestEntity, CustomHttpResponse.class);
     }
 
@@ -89,16 +87,5 @@ public class HttpCallLogic {
             }
         }
         return httpHeaders;
-    }
-
-    private MultiValueMap<String, Object> prepareRequestBody(CustomHttpRequest customHttpRequest) {
-        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
-        Map<String, Object> bodyMap = customHttpRequest.getBodyMap();
-        if (!bodyMap.isEmpty()) {
-            for (Map.Entry<String, Object> element : bodyMap.entrySet()) {
-                requestBody.add(element.getKey(), element.getValue());
-            }
-        }
-        return requestBody;
     }
 }
