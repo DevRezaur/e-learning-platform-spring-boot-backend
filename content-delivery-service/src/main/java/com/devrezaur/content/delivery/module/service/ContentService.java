@@ -17,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class ContentService {
@@ -58,7 +59,8 @@ public class ContentService {
     }
 
     private String generateHash(String contentName, String mimeType, long size) throws NoSuchAlgorithmException {
-        String transformedName = contentName + mimeType + size + new Date().getTime();
+        String transformedName = contentName + mimeType + size + new Date().getTime() +
+                ThreadLocalRandom.current().nextInt();
         MessageDigest messageDigest = MessageDigest.getInstance("MD5");
         messageDigest.update(transformedName.getBytes(StandardCharsets.UTF_8));
         return new BigInteger(1, messageDigest.digest()).toString(RADIX);
