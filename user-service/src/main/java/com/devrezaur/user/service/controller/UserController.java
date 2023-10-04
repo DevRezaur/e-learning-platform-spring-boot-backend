@@ -72,7 +72,13 @@ public class UserController {
 
     @PostMapping("/list")
     public ResponseEntity<CustomHttpResponse> getListOfUser(@RequestBody Map<String, List<UUID>> userIds) {
-        List<User> userList = userService.getListOfUser(userIds.get("userIds"));
+        List<User> userList;
+        try {
+            userList = userService.getListOfUser(userIds.get("userIds"));
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to fetch user information! Reason: " + ex.getMessage());
+        }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
 
