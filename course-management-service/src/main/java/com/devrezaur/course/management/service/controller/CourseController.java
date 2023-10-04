@@ -9,8 +9,10 @@ import com.devrezaur.course.management.service.service.CourseService;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -83,6 +85,21 @@ public class CourseController {
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED,
                 Map.of("message", "Successfully enrolled to the course"));
+    }
+
+    @GetMapping("/enrolled-users/{courseId}")
+    public ResponseEntity<CustomHttpResponse> getEnrolledUsers(@PathVariable UUID courseId) {
+        List<Map<String, Object>> userList = new ArrayList<>();
+        try {
+            List<UUID> enrolledUserIds = courseEnrollmentService.getEnrolledUserIds(courseId);
+            if (CollectionUtils.isEmpty(enrolledUserIds)) {
+                userList = courseEnrollmentService.fetchEnrolledUserInformation(enrolledUserIds);
+            }
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "400",
+                    "Failed to get enrolled user information! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
 
 }
