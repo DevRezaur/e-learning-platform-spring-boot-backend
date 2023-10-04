@@ -92,7 +92,7 @@ public class CourseController {
         List<Map<String, Object>> userList = new ArrayList<>();
         try {
             List<UUID> enrolledUserIds = courseEnrollmentService.getEnrolledUserIds(courseId);
-            if (CollectionUtils.isEmpty(enrolledUserIds)) {
+            if (!CollectionUtils.isEmpty(enrolledUserIds)) {
                 userList = courseEnrollmentService.fetchEnrolledUserInformation(enrolledUserIds);
             }
         } catch (Exception ex) {
