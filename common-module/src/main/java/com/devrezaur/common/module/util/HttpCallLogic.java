@@ -4,10 +4,7 @@ import com.devrezaur.common.module.model.CustomHttpRequest;
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -15,9 +12,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
 
+import static com.devrezaur.common.module.constant.CommonConstant.CONTENT_TYPE_HEADER_KEY;
 import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
 
 @Component
@@ -35,8 +32,8 @@ public class HttpCallLogic {
         URI url = prepareRequestUri(customHttpRequest);
         HttpMethod methodType = customHttpRequest.getMethodType();
         HttpHeaders requestHeaders = prepareRequestHeaders(customHttpRequest);
-        MultiValueMap<String, Object> requestBody = prepareRequestBody(customHttpRequest);
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(requestBody, requestHeaders);
+        Map<String, ?> requestBody = prepareRequestBody(customHttpRequest);
+        HttpEntity<Map<String, ?>> requestEntity = new HttpEntity<>(requestBody, requestHeaders);
         return restTemplate.exchange(url, methodType, requestEntity, CustomHttpResponse.class);
     }
 
@@ -92,22 +89,26 @@ public class HttpCallLogic {
         return httpHeaders;
     }
 
-    private MultiValueMap<String, Object> prepareRequestBody(CustomHttpRequest customHttpRequest) {
-        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+    private Map<String, ?> prepareRequestBody(CustomHttpRequest customHttpRequest) {
         Map<String, Object> bodyMap = customHttpRequest.getBodyMap();
-        if (!bodyMap.isEmpty()) {
-            for (Map.Entry<String, Object> element : bodyMap.entrySet()) {
-                String key = element.getKey();
-                Object value = element.getValue();
-                if (value instanceof List) {
-                    for (Object o : (List) value) {
-                        requestBody.add(key, o);
-                    }
-                } else {
+        boolean isMultipartFormDataHeaderPresent = isMultipartFormDataHeaderPresent(customHttpRequest);
+        if (isMultipartFormDataHeaderPresent) {
+            MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+            if (!bodyMap.isEmpty()) {
+                for (Map.Entry<String, Object> element : bodyMap.entrySet()) {
                     requestBody.add(element.getKey(), element.getValue());
                 }
             }
+            return requestBody;
         }
-        return requestBody;
+        return bodyMap;
+    }
+
+    private boolean isMultipartFormDataHeaderPresent(CustomHttpRequest customHttpRequest) {
+        Map<String, String> headerParameterMap = customHttpRequest.getHeaderParameterMap();
+        if (!headerParameterMap.isEmpty()) {
+            return headerParameterMap.get(CONTENT_TYPE_HEADER_KEY).equals(MediaType.MULTIPART_FORM_DATA_VALUE);
+        }
+        return false;
     }
 }
