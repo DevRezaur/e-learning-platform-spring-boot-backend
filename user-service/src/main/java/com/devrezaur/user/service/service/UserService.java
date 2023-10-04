@@ -85,11 +85,13 @@ public class UserService {
         customHttpRequest.setHeaderParameterMap(Map.of(CONTENT_TYPE_HEADER_KEY, MediaType.MULTIPART_FORM_DATA_VALUE));
         customHttpRequest.setBodyMap(Map.of("contents", image.getResource()));
         customHttpRequest.setUrl("http://localhost:8082/content-delivery-service/content");
-        ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+        try {
+            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
             List<String> urlIds = (List<String>) responseEntity.getBody().getResponseBody().get("urlList");
             existingUser.setImageUrl(urlIds.get(0));
             userRepository.save(existingUser);
+        } catch (Exception ex) {
+            throw new Exception("Error occurred while calling CONTENT-DELIVERY-SERVICE!");
         }
     }
 
