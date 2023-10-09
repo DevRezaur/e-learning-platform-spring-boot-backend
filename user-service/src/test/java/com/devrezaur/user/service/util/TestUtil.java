@@ -10,6 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.regex.Matcher;
 
+/**
+ * Utility class for integration tests
+ */
 @Component
 public class TestUtil {
 
@@ -19,6 +22,12 @@ public class TestUtil {
         this.systemLogger = systemLogger;
     }
 
+    /**
+     * Helper method to load data from a particular file
+     *
+     * @param relativePath relative path of the file
+     * @return data in json string format
+     */
     public String loadFromFile(String relativePath) {
         try {
             Path path = Paths.get(TestUtil.class.getClassLoader().getResource(relativePath.replaceAll("/",

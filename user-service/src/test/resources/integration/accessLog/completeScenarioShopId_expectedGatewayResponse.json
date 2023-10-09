@@ -1,0 +1,28 @@
+{
+  "expectedResponseHttpStatus": 207,
+  "expectedResponseBody": {
+    "interfaceKey": "accessLog",
+    "metaInformation": {
+      "cacheKey":"accessLog#shopId˭501082"
+    },
+    "body": {
+      "accessLog": {
+        "shopId": 501082,
+        "regDateY2s": "2016-10-13T11:25:44+09:00",
+        "loginEnY2s": "2020-05-20T15:10:06+09:00",
+        "loginRsY2s": "2018-05-29T13:27:31+09:00",
+        "logoutRsY2s": "2017-05-29T13:27:31+09:00",
+        "loginRbY2s": "2016-05-29T13:27:31+09:00",
+        "loginRtY2s": "2019-05-29T13:27:31+09:00",
+        "loginRmY2s": "2020-05-29T13:27:31+09:00",
+        "editInfo": 2,
+        "editInfoTimestampY2s": "2019-05-24T14:03:41+09:00",
+        "editInfoTimestamp2Y2s": "2019-05-24T14:07:34+09:00",
+        "rsFlag": 0,
+        "apache": "",
+        "operator": "shopdataapi",
+        "timeStamp": "2020-05-20T15:10:06+09:00"
+      }
+    }
+  }
+}

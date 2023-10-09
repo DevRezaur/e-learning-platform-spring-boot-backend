@@ -1,0 +1,18 @@
+{
+  "interfaceKey": "shopMaster",
+  "urlParameters": {
+    "shopId": "273914",
+    "itemIds": [
+      "123",
+      "345"
+    ]
+  },
+  "bodyParameters": {
+    "easyId": "15160049",
+    "favoriteList": {
+      "modelCd": "JJ407",
+      "productColorCd": "04",
+      "siteCd": "01"
+    }
+  }
+}

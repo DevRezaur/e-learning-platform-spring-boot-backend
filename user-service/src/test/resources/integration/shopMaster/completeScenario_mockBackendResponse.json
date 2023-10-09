@@ -1,0 +1,80 @@
+{
+  "expectedRequest": {
+    "subPath": "/shopId/273914",
+    "headerParameters": {
+      "X-Rakuten-Id-ServiceId": "ECSG_RAEEC_001",
+      "Accept": "application/json"
+    },
+    "connectionMap": {
+      "method": "GET"
+    },
+    "queryParameters": {
+      "shopId": "273914",
+      "itemIds": [
+        "123",
+        "345"
+      ]
+    },
+    "requestBody": {
+      "easy_id": "15160049",
+      "favorite_list": [
+        {
+          "model_cd": "JJ407",
+          "product_color_cd": "04",
+          "site_cd": "01"
+        }
+      ]
+    }
+  },
+  "mockResponse": {
+    "httpStatus": 200,
+    "body": {
+      "resultCode": "N000",
+      "resultMessageList": {
+        "resultMessage": [
+          {
+            "code": "N000",
+            "message": "Succeeded."
+          }
+        ]
+      },
+      "result": [
+        {
+          "type": "shopMasterBizModel",
+          "shopMaster": {
+            "id": 273914,
+            "flag": 1,
+            "shopName": "高坂店舗（ステージング）",
+            "url": "_kosaka-stg",
+            "companyName": "サンプルキギョウサキメイ",
+            "presidentName": "高坂ステジ　代表者名",
+            "addressZip": "012-3456",
+            "addressPrefecture": "大阪府",
+            "addressCity": "大阪市中央区",
+            "addressStreet": "南本町3-3-21 ",
+            "companyTel": "03-3801-0003",
+            "companyFax": "03-3801-0004",
+            "tantouName": "高坂ステジ 店舗運営責任者",
+            "tantouPost": "高坂ステジ",
+            "tantouTel": "03-3801-0001",
+            "tantouFax": "03-3801-0002",
+            "tantouMail": "hidekazu.b.kosaka@rakuten.com",
+            "basketMail": "hidekazu.b.kosaka@rakuten.com",
+            "panfMail": "hidekazu.b.kosaka@rakuten.com",
+            "supportMail": "hidekazu.b.kosaka@rakuten.com",
+            "supportTel": "03-3801-0005",
+            "shopId": 273914,
+            "supportFax": "03-3801-0006",
+            "shopnameKana": "こうさかしょっぷすてーじ",
+            "emergencyTel": "03-3801-0007",
+            "presentMail": "プレゼントE-mailアドレス",
+            "ramosId": 0,
+            "secName": "高坂ステジ セキュリティ責任者",
+            "secMail": "hidekazu.b.kosaka@rakuten.com",
+            "timeStamp": "2017-07-12T15:15:08+09:00"
+          }
+        }
+      ]
+    }
+  }
+}
