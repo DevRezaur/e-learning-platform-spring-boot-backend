@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.UrlPattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -38,7 +37,7 @@ public class IntegrationTests {
     private Map<String, Map<String, Object>> expectedResponseCollection;
     private Map<String, Set<String>> facadeApis;
 
-    static final String SELECTED_SCENARIO_PREFIX = "shopMaster";
+    static final String SELECTED_SCENARIO_PREFIX = "deliveryDateDisplay";
     static final String SCENARIO_SUFFIX = "EndOfName";
     static final String PARENT_JSON_FILE_PATH = "src/test/resources/integration";
 
@@ -46,8 +45,9 @@ public class IntegrationTests {
     private TestUtil testUtil;
 
     @BeforeAll
-    public static void beforeAll(){
-        setupMockServer();
+    public static void beforeAll() {
+        wireMockServer = new WireMockServer(TestSocketUtils.findAvailableTcpPort());
+        wireMockServer.start();
     }
 
     @BeforeEach
@@ -67,13 +67,6 @@ public class IntegrationTests {
         wireMockServer.stop();
     }
 
-    private static void setupMockServer(){
-        int mockServerPort;
-        mockServerPort = TestSocketUtils.findAvailableTcpPort();
-        wireMockServer = new WireMockServer(mockServerPort);
-        wireMockServer.start();
-    }
-
     @ParameterizedTest
     @ArgumentsSource(ScenarioProvider.class)
     @DisplayName("Integration Tests")
@@ -84,8 +77,30 @@ public class IntegrationTests {
 
         setupStub(apiName);
 
-        Assertions.assertTrue(StringUtils.isNotEmpty(apiName));
+        if (expectedResponseCollection.containsKey(apiScenario)) {
+            String expectedResponse = String.format("integration/%s/%s_expectedGatewayResponse.json",
+                    apiName, scenario);
+            String expectedResponseProperties = "";
+            Map<String, Object> expectedResponseMap = null;
+            Integer expectedResponseHttpStatus = 418;
 
+            expectedResponseProperties = testUtil.loadFromFile(expectedResponse);
+            expectedResponseMap = objectMapper.readValue(expectedResponseProperties, Map.class);
+            expectedResponseHttpStatus = (Integer) expectedResponseMap.getOrDefault("expectedResponseHttpStatus", 200);
+
+            String requestJson = testUtil.loadFromFile(String.format("integration/%s/%s_request.json", apiName, scenario));
+            Map<String, Object> requestMap = objectMapper.readValue(requestJson, Map.class);
+            Map<String, Object> requestBody = (Map<String, Object>) requestMap.get("body");
+            Map<String, Object> requestHeaders = (Map<String, Object>) requestMap.get("headers");
+
+            if (requestHeaders == null) {
+                requestBody = requestMap;
+                requestHeaders = new HashMap<>();
+            }
+
+        } else {
+            Assertions.fail(String.format("'%s' doesn't meet integration test assertion criteria!", apiName));
+        }
     }
 
     private void setupStub(String apiName) throws JsonProcessingException {
@@ -110,8 +125,9 @@ public class IntegrationTests {
 
             String[] apiScenarioSubStrings = apiScenario.split("_");
             String scenario = apiScenarioSubStrings[1];
-            String filePath = String.format("integration/%s/%s_mockBackendResponse.json", apiName, scenario);
-            String mockBackendPropertiesJson = testUtil.loadFromFile(filePath);
+            String mockResponseFilePath =
+                    String.format("integration/%s/%s_mockBackendResponse.json", apiName, scenario);
+            String mockBackendPropertiesJson = testUtil.loadFromFile(mockResponseFilePath);
 
             if (StringUtils.isNotEmpty(mockBackendPropertiesJson)) {
                 Map<String, Object> mockBackendPropertiesMap =
@@ -139,7 +155,6 @@ public class IntegrationTests {
                 expectedResponseCollection.put(apiScenario, Collections.EMPTY_MAP);
             }
         }
-        System.out.println("");
     }
 
     private void mappingRequest(String apiName, String scenario, Map<String, Object> mockBackendPropertiesMap)
@@ -187,6 +202,7 @@ public class IntegrationTests {
 
         ResponseDefinitionBuilder responseDefinitionBuilder = getResponseDefinitionBuilder(mockRequestBody, headers,
                 mockHttpStatus);
+        wireMockServer.stubFor(requiredRequestMappingBuilder.willReturn(responseDefinitionBuilder));
     }
 
     private MappingBuilder getMappingBuilder(String apiName, String scenario, String httpMethod, String subPath,
@@ -197,12 +213,6 @@ public class IntegrationTests {
                 .filter(entry -> ObjectUtils.isNotEmpty(entry.getValue()) && entry.getValue() instanceof Collection)
                 .map(entry -> {
                     List<String> parameterValues = (List<String>) entry.getValue();
-                    /**
-                     * Create a pattern for multivalued parameter matching
-                     * Example: filter :[a,b]
-                     * will generate
-                     * (?=.*filter=a)(?=.*filter=b).+
-                     */
                     return parameterValues
                             .stream()
                             .map(value -> {
@@ -215,7 +225,6 @@ public class IntegrationTests {
                                     String.format("(?=.*%s=", entry.getKey()), ").+"));
                 }).collect(Collectors.joining());
 
-        UrlPattern urlPathPattern;
         String pattern;
         if (subPath.isEmpty())
             pattern = String.format("/%s/%s.*", apiName, scenario + SCENARIO_SUFFIX);
@@ -226,7 +235,8 @@ public class IntegrationTests {
         if (StringUtils.isNotEmpty(queryPattern)) {
             pattern += queryPattern;
         }
-        urlPathPattern = urlMatching(pattern);
+
+        UrlPattern urlPathPattern = urlMatching(pattern);
         return switch (httpMethod) {
             case "GET" -> get(urlPathPattern);
             case "POST" -> post(urlPathPattern);
@@ -239,22 +249,18 @@ public class IntegrationTests {
     private void requiredHeaderParameterMapping(MappingBuilder mappingBuilder,
                                                 Map<String, Object> requiredHeaderParameters) {
         if (!requiredHeaderParameters.isEmpty()) {
-            requiredHeaderParameters.forEach(
-                    (key, value) -> mappingBuilder.withHeader(key, equalTo(value.toString()))
-            );
+            requiredHeaderParameters.forEach((key, value) -> mappingBuilder.withHeader(key, equalTo(value.toString())));
         }
     }
 
     private void requiredQueryParameterMapping(MappingBuilder mappingBuilder,
                                                Map<String, Object> requiredQueryParameters) {
         if (!requiredQueryParameters.isEmpty()) {
-            requiredQueryParameters.forEach(
-                    (key, value) -> {
-                        if (!(value instanceof List)) {
-                            mappingBuilder.withQueryParam(key, equalTo(value.toString()));
-                        }
-                    }
-            );
+            requiredQueryParameters.forEach((key, value) -> {
+                if (!(value instanceof List)) {
+                    mappingBuilder.withQueryParam(key, equalTo(value.toString()));
+                }
+            });
         }
     }
 
@@ -280,8 +286,8 @@ public class IntegrationTests {
                 responseDefinitionBuilder = responseDefinitionBuilder.withHeader(header.getKey(),
                         values.toArray(String[]::new));
             } else {
-                throw new RuntimeException("HTTP response header can be string or list of string: "
-                        + header.getValue());
+                throw new RuntimeException("IntegrationTests: Http headers can be either string or list of string! " +
+                        "Header used now: " + header.getValue());
             }
         }
         return responseDefinitionBuilder;

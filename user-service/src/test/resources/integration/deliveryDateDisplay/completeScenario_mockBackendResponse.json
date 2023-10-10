@@ -1,0 +1,188 @@
+{
+  "inventoryxV3": {
+    "expectedRequest": {
+      "subPath": "/shops/203646/manage-numbers/10007869",
+      "headerParameters": {
+        "X-Client-Id": "iOSApp_STG_000975"
+      },
+      "connectionMap": {
+        "method": "GET"
+      }
+    },
+    "mockResponse": {
+      "httpStatus": 200,
+      "body": {
+        "shopId": "203646",
+        "manageNumber": "10007869",
+        "variantMappedInventories": {
+          "19095519": {
+            "inventoryId": "17305",
+            "quantity": 150,
+            "operationLeadTime": {
+              "normalDeliveryTimeId": 1,
+              "backOrderDeliveryTimeId": 3
+            },
+            "shipFromIds": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          "19095520": {
+            "inventoryId": "17306",
+            "quantity": 150,
+            "operationLeadTime": {
+              "normalDeliveryTimeId": 1,
+              "backOrderDeliveryTimeId": 2
+            },
+            "shipFromIds": [
+              1,
+              2,
+              3
+            ]
+          },
+          "19095521": {
+            "inventoryId": "17307",
+            "quantity": 150,
+            "operationLeadTime": {
+              "normalDeliveryTimeId": 1,
+              "backOrderDeliveryTimeId": 1
+            },
+            "shipFromIds": [
+              1,
+              2
+            ]
+          },
+          "19095522": {
+            "inventoryId": "17308",
+            "quantity": 150,
+            "operationLeadTime": {
+              "normalDeliveryTimeId": 1,
+              "backOrderDeliveryTimeId": 2
+            },
+            "shipFromIds": [
+              2,
+              3
+            ]
+          },
+          "19095523": {
+            "inventoryId": "17309",
+            "quantity": 150,
+            "operationLeadTime": {
+              "normalDeliveryTimeId": 1,
+              "backOrderDeliveryTimeId": 1
+            },
+            "shipFromIds": [
+              4,
+              1
+            ]
+          }
+        },
+        "created": "2022-10-11T14:39:15.050Z",
+        "updated": "2022-10-19T10:45:20.879Z"
+      }
+    }
+  },
+  "deliveryTime": {
+    "expectedRequest": {
+      "connectionMap": {
+        "method": "GET"
+      },
+      "subPath": "/id/203646"
+    },
+    "mockResponse": {
+      "httpStatus": 200,
+      "body": {
+        "resultCode": "N000",
+        "resultMessageList": {
+          "resultMessage": [
+            {
+              "code": "N000",
+              "message": "Succeeded."
+            }
+          ]
+        },
+        "result": [
+          {
+            "type": "deliveryTimeBizModel",
+            "shipFromList": {
+              "shipFrom": [
+                {
+                  "shopId": 203646,
+                  "shipFromId": 1,
+                  "name": "insert9",
+                  "zipcodeFrom": "3350021",
+                  "defaultFlag": 0,
+                  "operator": "shopdataapi",
+                  "timeStamp": "2022-08-24T11:49:06+09:00"
+                },
+                {
+                  "shopId": 203646,
+                  "shipFromId": 2,
+                  "name": "insert10",
+                  "zipcodeFrom": "3350022",
+                  "defaultFlag": 1,
+                  "operator": "shopdataapi",
+                  "timeStamp": "2022-08-24T11:49:06+09:00"
+                },
+                {
+                  "shopId": 203647,
+                  "shipFromId": 3,
+                  "name": "insert10",
+                  "zipcodeFrom": "3350023",
+                  "defaultFlag": 1,
+                  "operator": "shopdataapi",
+                  "timeStamp": "2022-08-24T11:49:06+09:00"
+                },
+                {
+                  "shopId": 203648,
+                  "shipFromId": 4,
+                  "name": "insert10",
+                  "zipcodeFrom": "3350024",
+                  "defaultFlag": 1,
+                  "operator": "shopdataapi",
+                  "timeStamp": "2022-08-24T11:49:06+09:00"
+                }
+              ]
+            },
+            "operationLeadTimeList": {
+              "operationLeadTime": [
+                {
+                  "shopId": 203646,
+                  "operationLeadTimeId": 1,
+                  "name": "update",
+                  "numberOfDays": 2,
+                  "inStockDefaultFlag": 0,
+                  "outOfStockDefaultFlag": 1,
+                  "operator": "shopdataapi",
+                  "timeStamp": "2022-08-24T16:43:29+09:00"
+                },
+                {
+                  "shopId": 203646,
+                  "operationLeadTimeId": 2,
+                  "name": "insert4",
+                  "numberOfDays": 5,
+                  "inStockDefaultFlag": 0,
+                  "outOfStockDefaultFlag": 0,
+                  "operator": "shopdataapi",
+                  "timeStamp": "2022-08-24T11:48:34+09:00"
+                },
+                {
+                  "shopId": 203646,
+                  "operationLeadTimeId": 3,
+                  "name": "insert",
+                  "numberOfDays": 7,
+                  "inStockDefaultFlag": 1,
+                  "outOfStockDefaultFlag": 0,
+                  "operator": "shopdataapi",
+                  "timeStamp": "2022-08-24T16:43:29+09:00"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
