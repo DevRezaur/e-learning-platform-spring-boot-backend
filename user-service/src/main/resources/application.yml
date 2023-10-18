@@ -18,6 +18,10 @@ spring:
     username: root
     password: root
 
+service:
+  content-delivery-service:
+    base-url: http://localhost:8082/content-delivery-service
+
 keycloak:
   server-url: http://localhost:8080
   realm-name: e-learning-platform

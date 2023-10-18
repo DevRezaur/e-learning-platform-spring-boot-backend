@@ -22,11 +22,10 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class ContentService {
 
-    private static final int RADIX = 16;
-
     @Value("${content.file-upload-path}")
     private String fileUploadPath;
 
+    private static final int RADIX = 16;
     private static Path storageLocation;
 
     @PostConstruct

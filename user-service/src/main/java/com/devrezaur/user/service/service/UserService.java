@@ -6,6 +6,7 @@ import com.devrezaur.common.module.util.HttpCallLogic;
 import com.devrezaur.user.service.model.User;
 import com.devrezaur.user.service.repository.UserRepository;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_PASS
 
 @Service
 public class UserService {
+
+    @Value("${service.content-delivery-service.base-url}")
+    private String contentDeliveryServiceBaseUrl;
 
     private final HttpCallLogic httpCallLogic;
     private final UserRepository userRepository;
@@ -72,7 +76,7 @@ public class UserService {
         customHttpRequest.setMethodType(HttpMethod.POST);
         customHttpRequest.setHeaderParameterMap(Map.of(CONTENT_TYPE_HEADER_KEY, MediaType.MULTIPART_FORM_DATA_VALUE));
         customHttpRequest.setBodyMap(Map.of("contents", image.getResource()));
-        customHttpRequest.setUrl("http://localhost:8082/content-delivery-service/content");
+        customHttpRequest.setUrl(contentDeliveryServiceBaseUrl + "/content");
         try {
             ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
             List<String> urlIds = (List<String>) responseEntity.getBody().getResponseBody().get("urlList");
