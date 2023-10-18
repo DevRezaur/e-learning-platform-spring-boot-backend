@@ -3,7 +3,6 @@ package com.devrezaur.user.service.service;
 import com.devrezaur.common.module.model.CustomHttpRequest;
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.HttpCallLogic;
-import com.devrezaur.user.service.model.Role;
 import com.devrezaur.user.service.model.User;
 import com.devrezaur.user.service.repository.UserRepository;
 import org.slf4j.MDC;
@@ -22,6 +21,7 @@ import java.util.regex.Pattern;
 import static com.devrezaur.common.module.constant.CommonConstant.CONTENT_TYPE_HEADER_KEY;
 import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
 import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_EMAIL_REGEX;
+import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_PASSWORD_REGEX;
 
 @Service
 public class UserService {
@@ -38,23 +38,11 @@ public class UserService {
         return userRepository.findByUserId(userId);
     }
 
-    public List<User> getAllRegularUser() {
-        return userRepository.findByRole(Role.USER);
-    }
-
-    public List<User> getAllAdminUser() {
-        return userRepository.findByRole(Role.ADMIN);
-    }
-
     public List<User> getListOfUser(List<UUID> userIds) {
         return userRepository.findByUserIdIn(userIds);
     }
 
     public void addUser(User user) throws Exception {
-        boolean isEmailValid = isEmailValid(user.getEmail());
-        if (!isEmailValid) {
-            throw new Exception("Email id - " + user.getEmail() + " is not valid!");
-        }
         User existingUser = userRepository.findByEmail(user.getEmail());
         if (existingUser != null) {
             throw new Exception("User with email id - " + user.getEmail() + " already exists!");
@@ -95,6 +83,17 @@ public class UserService {
         }
     }
 
+    public void validateUserEntity(User user) throws Exception {
+        boolean isEmailValid = isEmailValid(user.getEmail());
+        boolean isPasswordValid = isPasswordValid(user.getPassword());
+        if (!isEmailValid) {
+            throw new Exception("Email id - " + user.getEmail() + " is not valid!");
+        } else if (!isPasswordValid) {
+            throw new Exception("Password should be minimum eight characters. And contain at least one uppercase " +
+                    "letter, one lowercase letter, one number and one special character!");
+        }
+    }
+
     private boolean isEmailValid(String email) {
         if (!StringUtils.hasLength(email)) {
             return false;
@@ -102,4 +101,10 @@ public class UserService {
         return Pattern.compile(VALID_EMAIL_REGEX).matcher(email).matches();
     }
 
+    private boolean isPasswordValid(String password) {
+        if (!StringUtils.hasLength(password)) {
+            return false;
+        }
+        return Pattern.compile(VALID_PASSWORD_REGEX).matcher(password).matches();
+    }
 }
