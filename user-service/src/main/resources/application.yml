@@ -17,6 +17,12 @@ spring:
     driver-class-name: org.h2.Driver
     username: root
     password: root
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/realms/e-learning-platform/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/realms/e-learning-platform
 
 service:
   content-delivery-service:
