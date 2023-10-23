@@ -41,7 +41,7 @@ public class KeycloakService {
         if (response.getStatus() == 201) {
             try {
                 String keyCloakUserId = getKeyCloakUserId(user.getEmail());
-                UserResource userResource = keycloak.realm(realmName).users().get(keyCloakUserId);
+                UserResource userResource = getUserResourceById(keyCloakUserId);
                 updateUserRole(userResource, user.getRole());
                 updateUserCredentials(userResource, user.getPassword());
                 return UUID.fromString(keyCloakUserId);
@@ -54,7 +54,7 @@ public class KeycloakService {
     }
 
     public void updateUser(User user) throws Exception {
-        UserResource userResource = keycloak.realm(realmName).users().get(user.getUserId().toString());
+        UserResource userResource = getUserResourceById(user.getUserId().toString());
         UserRepresentation userRepresentation = userResource.toRepresentation();
         if (userRepresentation == null) {
             throw new Exception("No user found in auth server with this email!");
@@ -72,13 +72,17 @@ public class KeycloakService {
         return userRepresentationList.get(0).getId();
     }
 
+    public UserResource getUserResourceById(String id) {
+        return keycloak.realm(realmName).users().get(id);
+    }
+
     private void updateUserRole(UserResource userResource, Role role) {
         List<RoleRepresentation> roleRepresentationList = new LinkedList<>();
         roleRepresentationList.add(keycloak.realm(realmName).roles().get(role.toString()).toRepresentation());
         userResource.roles().realmLevel().add(roleRepresentationList);
     }
 
-    private void updateUserCredentials(UserResource userResource, String password) {
+    public void updateUserCredentials(UserResource userResource, String password) {
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
         credentialRepresentation.setTemporary(false);

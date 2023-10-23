@@ -6,6 +6,7 @@ import com.devrezaur.user.service.model.Role;
 import com.devrezaur.user.service.model.User;
 import com.devrezaur.user.service.service.KeycloakService;
 import com.devrezaur.user.service.service.UserService;
+import org.keycloak.admin.client.resource.UserResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<CustomHttpResponse> addRegularUser(@RequestBody User user) {
         try {
-            userService.validateUserEntity(user);
+            userService.validateEmail(user.getEmail());
+            userService.validatePassword(user.getPassword());
             user.setRole(Role.USER);
             UUID userId = keycloakService.registerNewUser(user);
             user.setUserId(userId);
@@ -45,7 +47,8 @@ public class UserController {
     @PostMapping("/admin")
     public ResponseEntity<CustomHttpResponse> addAdminUser(@RequestBody User user) {
         try {
-            userService.validateUserEntity(user);
+            userService.validateEmail(user.getEmail());
+            userService.validatePassword(user.getPassword());
             user.setRole(Role.ADMIN);
             UUID userId = keycloakService.registerNewUser(user);
             user.setUserId(userId);
@@ -83,10 +86,10 @@ public class UserController {
     }
 
     @PostMapping("/list")
-    public ResponseEntity<CustomHttpResponse> getListOfUser(@RequestBody Map<String, List<UUID>> userIds) {
+    public ResponseEntity<CustomHttpResponse> getListOfUser(@RequestBody Map<String, List<UUID>> userIdsMap) {
         List<User> userList;
         try {
-            userList = userService.getListOfUser(userIds.get("userIds"));
+            userList = userService.getListOfUser(userIdsMap.get("userIds"));
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to fetch user information! Reason: " + ex.getMessage());
@@ -118,6 +121,22 @@ public class UserController {
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message",
                 "Successfully updated profile image"));
+    }
+
+    @PostMapping("/password/{userId}")
+    public ResponseEntity<CustomHttpResponse> updatePassword(@PathVariable UUID userId,
+                                                             @RequestBody Map<String, String> passwordMap) {
+        try {
+            String password = passwordMap.get("password");
+            userService.validatePassword(password);
+            UserResource userResource = keycloakService.getUserResourceById(userId.toString());
+            keycloakService.updateUserCredentials(userResource, password);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
+                    "Failed to update password! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message",
+                "Successfully updated password"));
     }
 
 }

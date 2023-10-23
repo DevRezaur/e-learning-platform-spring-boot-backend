@@ -87,12 +87,16 @@ public class UserService {
         }
     }
 
-    public void validateUserEntity(User user) throws Exception {
-        boolean isEmailValid = isEmailValid(user.getEmail());
-        boolean isPasswordValid = isPasswordValid(user.getPassword());
+    public void validateEmail(String email) throws Exception {
+        boolean isEmailValid = isEmailValid(email);
         if (!isEmailValid) {
-            throw new Exception("Email id - " + user.getEmail() + " is not valid!");
-        } else if (!isPasswordValid) {
+            throw new Exception("Email id - " + email + " is not valid!");
+        }
+    }
+
+    public void validatePassword(String password) throws Exception {
+        boolean isPasswordValid = isPasswordValid(password);
+        if (!isPasswordValid) {
             throw new Exception("Password should be minimum eight characters. And contain at least one uppercase " +
                     "letter, one lowercase letter, one number and one special character!");
         }
