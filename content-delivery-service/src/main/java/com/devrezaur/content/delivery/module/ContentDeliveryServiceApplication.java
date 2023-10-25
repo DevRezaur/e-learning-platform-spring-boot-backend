@@ -3,7 +3,7 @@ package com.devrezaur.content.delivery.module;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = "com.devrezaur")
+@SpringBootApplication
 public class ContentDeliveryServiceApplication {
 
     public static void main(String[] args) {

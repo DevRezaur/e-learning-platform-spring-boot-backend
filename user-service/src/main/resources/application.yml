@@ -24,6 +24,9 @@ spring:
           jwk-set-uri: http://localhost:8080/realms/e-learning-platform/protocol/openid-connect/certs
           issuer-uri: http://localhost:8080/realms/e-learning-platform
 
+connection:
+  timeout: 3000
+
 service:
   content-delivery-service:
     base-url: http://localhost:8082/content-delivery-service
