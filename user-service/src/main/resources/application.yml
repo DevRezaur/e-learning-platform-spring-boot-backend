@@ -27,12 +27,12 @@ spring:
 connection:
   timeout: 3000
 
-service:
-  content-delivery-service:
-    base-url: http://localhost:8082/content-delivery-service
-
 keycloak:
   server-url: http://localhost:8080
   realm-name: e-learning-platform
   admin-cli-client-id: admin-cli
   admin-cli-client-secret: 6dpnnNwXp28QfURc7FY45Zanp3BNatGY
+
+service:
+  content-delivery-service:
+    base-url: http://localhost:8082/content-delivery-service

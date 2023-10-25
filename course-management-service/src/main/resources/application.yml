@@ -21,6 +21,12 @@ spring:
 connection:
   timeout: 3000
 
+keycloak:
+  server-url: http://localhost:8080
+  realm-name: e-learning-platform
+  admin-cli-client-id: admin-cli
+  admin-cli-client-secret: 6dpnnNwXp28QfURc7FY45Zanp3BNatGY
+
 service:
   user-service:
     base-url: http://localhost:8081/user-service
