@@ -106,7 +106,7 @@ public class UserController {
     }
 
     @PostMapping("/profile")
-
+    @PreAuthorize("hasRole('ADMIN') or #user.userId.toString().equals(#jwt.subject)")
     public ResponseEntity<CustomHttpResponse> updateProfile(@RequestBody User user, @AuthenticationPrincipal Jwt jwt) {
         try {
             keycloakService.updateUser(user);
@@ -120,7 +120,7 @@ public class UserController {
     }
 
     @PostMapping("/image/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId == #jwt.subject")
+    @PreAuthorize("hasRole('ADMIN') or #userId.toString().equals(#jwt.subject)")
     public ResponseEntity<CustomHttpResponse> updatePhoto(@PathVariable UUID userId,
                                                           @RequestParam MultipartFile image,
                                                           @AuthenticationPrincipal Jwt jwt) {
@@ -135,7 +135,7 @@ public class UserController {
     }
 
     @PostMapping("/password/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId == #jwt.subject")
+    @PreAuthorize("hasRole('ADMIN') or #userId.toString().equals(#jwt.subject)")
     public ResponseEntity<CustomHttpResponse> updatePassword(@PathVariable UUID userId,
                                                              @RequestBody Map<String, String> passwordMap,
                                                              @AuthenticationPrincipal Jwt jwt) {
