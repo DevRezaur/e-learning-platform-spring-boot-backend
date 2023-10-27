@@ -10,8 +10,6 @@ import org.keycloak.admin.client.resource.UserResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -106,8 +104,8 @@ public class UserController {
     }
 
     @PostMapping("/profile")
-    @PreAuthorize("hasRole('ADMIN') or #user.userId.toString().equals(#jwt.subject)")
-    public ResponseEntity<CustomHttpResponse> updateProfile(@RequestBody User user, @AuthenticationPrincipal Jwt jwt) {
+    @PreAuthorize("hasRole('ADMIN') or #user.userId.toString() == authentication.principal.subject")
+    public ResponseEntity<CustomHttpResponse> updateProfile(@RequestBody User user) {
         try {
             keycloakService.updateUser(user);
             userService.updateUser(user);
@@ -120,10 +118,9 @@ public class UserController {
     }
 
     @PostMapping("/image/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId.toString().equals(#jwt.subject)")
+    @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.principal.subject")
     public ResponseEntity<CustomHttpResponse> updatePhoto(@PathVariable UUID userId,
-                                                          @RequestParam MultipartFile image,
-                                                          @AuthenticationPrincipal Jwt jwt) {
+                                                          @RequestParam MultipartFile image) {
         try {
             userService.updateProfileImage(userId, image);
         } catch (Exception ex) {
@@ -135,10 +132,9 @@ public class UserController {
     }
 
     @PostMapping("/password/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId.toString().equals(#jwt.subject)")
+    @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.principal.subject")
     public ResponseEntity<CustomHttpResponse> updatePassword(@PathVariable UUID userId,
-                                                             @RequestBody Map<String, String> passwordMap,
-                                                             @AuthenticationPrincipal Jwt jwt) {
+                                                             @RequestBody Map<String, String> passwordMap) {
         try {
             String password = passwordMap.get("password");
             userService.validatePassword(password);
