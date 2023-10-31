@@ -17,6 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Main controller class for the application 'user-service'.
+ * <p>
+ * All the API related to user's personal information are written here.
+ *
+ * @author Rezaur Rahman
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -24,11 +31,26 @@ public class UserController {
     private final KeycloakService keycloakService;
     private final UserService userService;
 
+    /**
+     * Constructor for UserController
+     *
+     * @param keycloakService bean of KeycloakService
+     * @param userService     bean of UserService
+     */
     public UserController(KeycloakService keycloakService, UserService userService) {
         this.keycloakService = keycloakService;
         this.userService = userService;
     }
 
+    /**
+     * API to add / register user with role 'USER'.
+     * <p>
+     * To use this API, client application doesn't need to pass any access token.
+     *
+     * @param user request payload containing user data
+     * @return success only if the user can be successfully added to both KeyCloak auth server
+     * and 'user-service-db'. Else returns 400-Bad Request.
+     */
     @PostMapping
     public ResponseEntity<CustomHttpResponse> addRegularUser(@RequestBody User user) {
         try {
@@ -45,6 +67,15 @@ public class UserController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", "Successfully added user"));
     }
 
+    /**
+     * API to add / register user with role 'ADMIN'.
+     * <p>
+     * To use this API, client application needs to pass access token with role 'ADMIN'.
+     *
+     * @param user request payload containing user's data
+     * @return success only if the user can be successfully added to both KeyCloak auth server
+     * and 'user-service-db'. Else returns 400-Bad Request.
+     */
     @PostMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomHttpResponse> addAdminUser(@RequestBody User user) {
@@ -63,6 +94,14 @@ public class UserController {
                 Map.of("message", "Successfully added admin user"));
     }
 
+    /**
+     * API to fetch any particular user's information.
+     * <p>
+     * To use this API, client application needs to pass access token with either role 'ADMIN' or 'USER'.
+     *
+     * @param userId userId of the user
+     * @return user information found in the 'user-service-db'. Else returns 404-Not Found.
+     */
     @GetMapping("/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getUserById(@PathVariable UUID userId) {
@@ -74,6 +113,14 @@ public class UserController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("user", user));
     }
 
+    /**
+     * API to list all the user with role 'USER'.
+     * <p>
+     * <></>
+     * To use this API, client application needs to pass access token with either role 'ADMIN' or 'USER'.
+     *
+     * @return List of user information found in the 'user-service-db'. Else returns 404-Not Found.
+     */
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getAllRegularUser() {
@@ -83,7 +130,7 @@ public class UserController {
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getAllAdminUser() {
         List<UUID> userIds = keycloakService.getUserIdsByRole(Role.ADMIN);
         List<User> userList = userService.getListOfUser(userIds);
