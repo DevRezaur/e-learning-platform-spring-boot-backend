@@ -4,13 +4,15 @@
 
 # User Service
 
-* Add regular user info
-* Add admin user info
-* Get single user info
-* Get all regular user info
-* Get all admin user info
-* Update profile picture
-* Update profile information
+* Add regular user (No role needed)
+* Add admin user info (ADMIN role need)
+* Get user info by id (USER/ADMIN role needed)
+* Get all regular user info (USER/ADMIN role needed)
+* Get all admin user info (USER/ADMIN role needed)
+* Get a list of admin/regular user info (USER/ADMIN role needed)
+* Update profile information (ADMIN role or user him/herself needed)
+* Update profile picture (ADMIN role or user him/herself needed)
+* Update password (ADMIN role or user him/herself needed)
 
 # Content Delivery Service
 

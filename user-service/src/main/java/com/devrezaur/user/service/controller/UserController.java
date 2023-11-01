@@ -20,7 +20,7 @@ import java.util.UUID;
 /**
  * Main controller class for the application 'user-service'.
  * <p>
- * All the API related to user's personal information are written here.
+ * All the APIs related to user's personal information are written here.
  *
  * @author Rezaur Rahman
  */
@@ -34,8 +34,8 @@ public class UserController {
     /**
      * Constructor for UserController
      *
-     * @param keycloakService bean of KeycloakService
-     * @param userService     bean of UserService
+     * @param keycloakService bean of KeycloakService.
+     * @param userService     bean of UserService.
      */
     public UserController(KeycloakService keycloakService, UserService userService) {
         this.keycloakService = keycloakService;
@@ -47,7 +47,7 @@ public class UserController {
      * <p>
      * To use this API, client application doesn't need to pass any access token.
      *
-     * @param user request payload containing user data
+     * @param user request payload containing user data.
      * @return success only if the user can be successfully added to both KeyCloak auth server
      * and 'user-service-db'. Else returns 400-Bad Request.
      */
@@ -72,7 +72,7 @@ public class UserController {
      * <p>
      * To use this API, client application needs to pass access token with role 'ADMIN'.
      *
-     * @param user request payload containing user's data
+     * @param user request payload containing user's data.
      * @return success only if the user can be successfully added to both KeyCloak auth server
      * and 'user-service-db'. Else returns 400-Bad Request.
      */
@@ -99,7 +99,7 @@ public class UserController {
      * <p>
      * To use this API, client application needs to pass access token with either role 'ADMIN' or 'USER'.
      *
-     * @param userId userId of the user
+     * @param userId userId of the user.
      * @return user information found in the 'user-service-db'. Else returns 404-Not Found.
      */
     @GetMapping("/{userId}")
@@ -116,10 +116,9 @@ public class UserController {
     /**
      * API to list all the user with role 'USER'.
      * <p>
-     * <></>
      * To use this API, client application needs to pass access token with either role 'ADMIN' or 'USER'.
      *
-     * @return List of user information found in the 'user-service-db'. Else returns 404-Not Found.
+     * @return list of user information found in the KeyCloak auth server with role 'USER' and in 'user-service-db'.
      */
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
@@ -129,6 +128,13 @@ public class UserController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
 
+    /**
+     * API to list all the user with role 'ADMIN'.
+     * <p>
+     * To use this API, client application needs to pass access token with either role 'ADMIN' or 'USER'.
+     *
+     * @return list of user information found in the KeyCloak auth server with role 'ADMIN' and in 'user-service-db'.
+     */
     @GetMapping("/admin")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getAllAdminUser() {
@@ -137,6 +143,14 @@ public class UserController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
 
+    /**
+     * API to fetch a list of user info with role 'ADMIN' & 'USER'.
+     * <p>
+     * To use this API, client application needs to pass access token with either role 'ADMIN' or 'USER'.
+     *
+     * @param userIdsMap map containing a list of user ids whose information is to be queried.
+     * @return list of user information found in the 'user-service-db'.
+     */
     @PostMapping("/list")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getListOfUser(@RequestBody Map<String, List<UUID>> userIdsMap) {
@@ -150,6 +164,15 @@ public class UserController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
 
+    /**
+     * API to update user profile information.
+     * <p>
+     * To use this API, client application needs to pass access token of that particular user.
+     * Or it needs to pass access token with role 'ADMIN'.
+     *
+     * @param user request payload containing user profile information.
+     * @return success if operation is successful. Else returns 417-Expectation Failed.
+     */
     @PostMapping("/profile")
     @PreAuthorize("hasRole('ADMIN') or #user.userId.toString() == authentication.principal.subject")
     public ResponseEntity<CustomHttpResponse> updateProfile(@RequestBody User user) {
@@ -164,6 +187,16 @@ public class UserController {
                 "Successfully updated user information"));
     }
 
+    /**
+     * API to update user profile picture.
+     * <p>
+     * To use this API, client application needs to pass access token of that particular user.
+     * Or it needs to pass access token with role 'ADMIN'.
+     *
+     * @param userId id of the user.
+     * @param image  new profile picture.
+     * @return success if operation is successful. Else returns 417-Expectation Failed.
+     */
     @PostMapping("/image/{userId}")
     @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.principal.subject")
     public ResponseEntity<CustomHttpResponse> updatePhoto(@PathVariable UUID userId,
@@ -178,6 +211,16 @@ public class UserController {
                 "Successfully updated profile image"));
     }
 
+    /**
+     * API to update account password.
+     * <p>
+     * To use this API, client application needs to pass access token of that particular user.
+     * Or it needs to pass access token with role 'ADMIN'.
+     *
+     * @param userId      id of the user.
+     * @param passwordMap map containing new password.
+     * @return success if operation is successful. Else returns 417-Expectation Failed.
+     */
     @PostMapping("/password/{userId}")
     @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.principal.subject")
     public ResponseEntity<CustomHttpResponse> updatePassword(@PathVariable UUID userId,
