@@ -13,11 +13,24 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
+/**
+ * Configuration class for Spring Security.
+ *
+ * @author Rezaur Rahman
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfiguration {
 
+    /**
+     * Defines a custom security filter chain configuration for Spring Security.
+     * This configuration specifies how to handle security aspects for the application.
+     *
+     * @param httpSecurity the HttpSecurity object to configure the security filters.
+     * @return instance of SecurityFilterChain that defines the order and behavior of security filters.
+     * @throws Exception if an error occurs during configuration.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity

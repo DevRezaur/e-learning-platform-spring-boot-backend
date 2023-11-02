@@ -9,6 +9,11 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+/**
+ * Java class representing user entity of the application.
+ *
+ * @author Rezaur Rahman
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
