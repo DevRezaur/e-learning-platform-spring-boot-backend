@@ -25,7 +25,7 @@ public class WebSecurityConfiguration {
 
     /**
      * Defines a custom security filter chain configuration for Spring Security.
-     * This configuration specifies how to handle security aspects for the application.
+     * This configuration specifies how to handle security aspects of the application.
      *
      * @param httpSecurity the HttpSecurity object to configure the security filters.
      * @return instance of SecurityFilterChain that defines the order and behavior of security filters.
