@@ -2,12 +2,14 @@ package com.devrezaur.content.delivery.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * The main application class for 'content-delivery-service'.
  *
  * @author Rezaur Rahman
  */
+@EnableDiscoveryClient
 @SpringBootApplication
 public class ContentDeliveryServiceApplication {
 

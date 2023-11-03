@@ -4,6 +4,8 @@ server:
     context-path: /user-service
 
 spring:
+  application:
+    name: user-service
   jpa:
     open-in-view: false
     show-sql: true
@@ -23,6 +25,11 @@ spring:
         jwt:
           jwk-set-uri: http://localhost:8080/realms/e-learning-platform/protocol/openid-connect/certs
           issuer-uri: http://localhost:8080/realms/e-learning-platform
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
 
 connection:
   timeout: 3000
