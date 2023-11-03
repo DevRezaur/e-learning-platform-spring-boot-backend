@@ -11,7 +11,7 @@ import java.time.Duration;
 @Configuration
 public class RestTemplateConfiguration {
 
-    @Value("${connection.timeout}")
+    @Value("${connection.timeout:3000}")
     public Integer timeout;
 
     @Bean
