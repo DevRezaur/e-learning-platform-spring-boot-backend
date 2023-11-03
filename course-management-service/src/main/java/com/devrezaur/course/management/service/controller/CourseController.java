@@ -9,6 +9,7 @@ import com.devrezaur.course.management.service.service.CourseService;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class CourseController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomHttpResponse> addCourse(@RequestBody Course course) {
         try {
             courseService.addCourses(course);
@@ -42,6 +44,7 @@ public class CourseController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getAllCourses(@RequestParam @Nullable UUID userId) {
         List<Course> courseList;
         if (userId != null) {
@@ -54,6 +57,7 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getCourseById(@PathVariable UUID courseId) {
         Course course = courseService.getCourseByUserId(courseId);
         if (course == null) {
@@ -64,6 +68,7 @@ public class CourseController {
     }
 
     @PostMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomHttpResponse> updateCourse(@RequestBody Course course) {
         try {
             courseService.updateCourse(course);
@@ -76,6 +81,7 @@ public class CourseController {
     }
 
     @PostMapping("/enroll")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomHttpResponse> enrollToCourse(@RequestBody CourseEnrollmentInfo courseEnrollmentInfo) {
         try {
             courseEnrollmentService.enrollToCourse(courseEnrollmentInfo);
@@ -88,6 +94,7 @@ public class CourseController {
     }
 
     @GetMapping("/enrolled-users/{courseId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getEnrolledUsers(@PathVariable UUID courseId) {
         List<Map<String, Object>> userList = new ArrayList<>();
         try {

@@ -6,6 +6,7 @@ import com.devrezaur.common.module.util.HttpCallLogic;
 import com.devrezaur.course.management.service.model.CourseEnrollmentInfo;
 import com.devrezaur.course.management.service.repository.CourseEnrollmentInfoRepository;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
 
 @Service
 public class CourseEnrollmentService {
+
+    @Value("${service.user-service.base-url}")
+    private String userServiceBaseUrl;
 
     private final HttpCallLogic httpCallLogic;
     private final CourseEnrollmentInfoRepository courseEnrollmentRepository;
@@ -54,7 +58,7 @@ public class CourseEnrollmentService {
         customHttpRequest.setMethodType(HttpMethod.POST);
         customHttpRequest.setHeaderParameterMap(Map.of(CONTENT_TYPE_HEADER_KEY, MediaType.APPLICATION_JSON_VALUE));
         customHttpRequest.setBodyMap(Map.of("userIds", enrolledUserIds));
-        customHttpRequest.setUrl("http://localhost:8081/user-service/user/list");
+        customHttpRequest.setUrl(userServiceBaseUrl + "/user/list");
         try {
             ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
             return (List<Map<String, Object>>) responseEntity.getBody().getResponseBody().get("userList");

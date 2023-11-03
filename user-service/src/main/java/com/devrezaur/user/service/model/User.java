@@ -1,10 +1,19 @@
 package com.devrezaur.user.service.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
+/**
+ * Java class representing user entity of the application.
+ *
+ * @author Rezaur Rahman
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -14,7 +23,6 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue
     @Column(name = "user_id")
     private UUID userId;
 
@@ -30,12 +38,17 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Transient
+    private String password;
+
     @Column(name = "gender")
     private String gender;
 
     @Column(name = "date_of_birth")
     private String dateOfBirth;
 
-    @Column(name = "role")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Transient
     private Role role;
 }
