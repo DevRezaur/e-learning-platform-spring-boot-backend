@@ -32,10 +32,10 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * Constructor for UserController
+     * Constructor for UserController class.
      *
-     * @param keycloakService bean of KeycloakService.
-     * @param userService     bean of UserService.
+     * @param keycloakService instance of KeycloakService.
+     * @param userService     instance of UserService.
      */
     public UserController(KeycloakService keycloakService, UserService userService) {
         this.keycloakService = keycloakService;
