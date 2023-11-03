@@ -1,4 +1,4 @@
-package com.devrezaur.common.module.config;
+package com.devrezaur.user.service.config;
 
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
