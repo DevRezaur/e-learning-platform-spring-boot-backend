@@ -4,4 +4,5 @@ include 'user-service'
 include 'content-delivery-service'
 include 'course-management-service'
 include 'discovery-server'
+include 'api-gateway'
 
