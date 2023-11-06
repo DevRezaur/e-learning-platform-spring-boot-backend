@@ -1,6 +1,12 @@
 server:
   port: 8761
 
+spring:
+  security:
+    user:
+      name: admin
+      password: admin
+
 eureka:
   client:
     fetch-registry: false
