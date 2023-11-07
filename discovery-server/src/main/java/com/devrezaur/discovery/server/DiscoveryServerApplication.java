@@ -12,7 +12,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
  * @author Rezaur Rahman
  */
 @EnableEurekaServer
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.devrezaur")
 public class DiscoveryServerApplication {
 
     /**

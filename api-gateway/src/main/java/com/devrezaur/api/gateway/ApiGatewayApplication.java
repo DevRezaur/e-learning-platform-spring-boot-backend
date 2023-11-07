@@ -1,8 +1,11 @@
 package com.devrezaur.api.gateway;
 
+import com.devrezaur.common.module.config.RestTemplateConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 
 /**
  * The main application class for 'api-gateway'.
@@ -13,7 +16,15 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @author Rezaur Rahman
  */
 @EnableDiscoveryClient
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.devrezaur")
+@ComponentScan(excludeFilters = {
+        @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = {
+                        RestTemplateConfiguration.class
+                }
+        )
+})
 public class ApiGatewayApplication {
 
     /**
