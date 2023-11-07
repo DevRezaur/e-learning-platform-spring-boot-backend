@@ -6,6 +6,12 @@ spring:
     name: api-gateway
   main:
     web-application-type: reactive
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/realms/e-learning-platform/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/realms/e-learning-platform
   cloud:
     gateway:
       routes:
