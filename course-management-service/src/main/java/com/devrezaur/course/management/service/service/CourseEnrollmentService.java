@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.devrezaur.common.module.constant.CommonConstant.CONTENT_TYPE_HEADER_KEY;
-import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
+import static com.devrezaur.common.module.constant.CommonConstant.*;
 
 @Service
 public class CourseEnrollmentService {
@@ -52,11 +52,15 @@ public class CourseEnrollmentService {
         return courseEnrollmentInfoList.stream().map(CourseEnrollmentInfo::getUserId).toList();
     }
 
-    public List<Map<String, Object>> fetchEnrolledUserInformation(List<UUID> enrolledUserIds) throws Exception {
+    public List<Map<String, Object>> fetchEnrolledUserInformation(List<UUID> enrolledUserIds,
+                                                                  Jwt jwt) throws Exception {
         CustomHttpRequest customHttpRequest = new CustomHttpRequest();
         customHttpRequest.setRequestId(MDC.get(REQUEST_ID));
         customHttpRequest.setMethodType(HttpMethod.POST);
-        customHttpRequest.setHeaderParameterMap(Map.of(CONTENT_TYPE_HEADER_KEY, MediaType.APPLICATION_JSON_VALUE));
+        customHttpRequest.setHeaderParameterMap(Map.of(
+                CONTENT_TYPE_HEADER_KEY, MediaType.APPLICATION_JSON_VALUE,
+                AUTHORIZATION_HEADER, BEARER_PREFIX + jwt.getTokenValue())
+        );
         customHttpRequest.setBodyMap(Map.of("userIds", enrolledUserIds));
         customHttpRequest.setUrl(userServiceBaseUrl + "/user/list");
         try {

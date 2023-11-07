@@ -1,6 +1,5 @@
 package com.devrezaur.user.service.service;
 
-import com.devrezaur.user.service.model.Role;
 import com.devrezaur.user.service.model.User;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
@@ -122,9 +121,9 @@ public class KeycloakService {
      * @param userResource the UserResource object representing the user.
      * @param role         new role for the user.
      */
-    private void updateUserRole(UserResource userResource, Role role) {
+    private void updateUserRole(UserResource userResource, String role) {
         List<RoleRepresentation> roleRepresentationList = new LinkedList<>();
-        roleRepresentationList.add(keycloak.realm(realmName).roles().get(role.toString()).toRepresentation());
+        roleRepresentationList.add(keycloak.realm(realmName).roles().get(role).toRepresentation());
         userResource.roles().realmLevel().add(roleRepresentationList);
     }
 
@@ -148,10 +147,10 @@ public class KeycloakService {
      * @param role the role for which to retrieve user UUIDs.
      * @return list of UUIDs representing users with the specified role.
      */
-    public List<UUID> getUserIdsByRole(Role role) {
+    public List<UUID> getUserIdsByRole(String role) {
         List<UUID> userIds = new ArrayList<>();
         List<UserRepresentation> userRepresentationList =
-                keycloak.realm(realmName).roles().get(role.toString()).getUserMembers();
+                keycloak.realm(realmName).roles().get(role).getUserMembers();
         for (UserRepresentation userRepresentation : userRepresentationList) {
             userIds.add(UUID.fromString(userRepresentation.getId()));
         }

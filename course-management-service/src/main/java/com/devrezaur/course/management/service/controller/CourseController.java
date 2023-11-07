@@ -10,6 +10,8 @@ import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -95,12 +97,13 @@ public class CourseController {
 
     @GetMapping("/enrolled-users/{courseId}")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<CustomHttpResponse> getEnrolledUsers(@PathVariable UUID courseId) {
+    public ResponseEntity<CustomHttpResponse> getEnrolledUsers(@PathVariable UUID courseId,
+                                                               @AuthenticationPrincipal Jwt jwt) {
         List<Map<String, Object>> userList = new ArrayList<>();
         try {
             List<UUID> enrolledUserIds = courseEnrollmentService.getEnrolledUserIds(courseId);
             if (!CollectionUtils.isEmpty(enrolledUserIds)) {
-                userList = courseEnrollmentService.fetchEnrolledUserInformation(enrolledUserIds);
+                userList = courseEnrollmentService.fetchEnrolledUserInformation(enrolledUserIds, jwt);
             }
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "400",

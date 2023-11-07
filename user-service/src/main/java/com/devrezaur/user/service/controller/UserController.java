@@ -2,7 +2,6 @@ package com.devrezaur.user.service.controller;
 
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
-import com.devrezaur.user.service.model.Role;
 import com.devrezaur.user.service.model.User;
 import com.devrezaur.user.service.service.KeycloakService;
 import com.devrezaur.user.service.service.UserService;
@@ -10,12 +9,17 @@ import org.keycloak.admin.client.resource.UserResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static com.devrezaur.user.service.constant.UserServiceConstant.ROLE_ADMIN;
+import static com.devrezaur.user.service.constant.UserServiceConstant.ROLE_USER;
 
 /**
  * Main controller class for the application 'user-service'.
@@ -56,7 +60,7 @@ public class UserController {
         try {
             userService.validateEmail(user.getEmail());
             userService.validatePassword(user.getPassword());
-            user.setRole(Role.USER);
+            user.setRole(ROLE_USER);
             UUID userId = keycloakService.registerNewUser(user);
             user.setUserId(userId);
             userService.addUser(user);
@@ -82,7 +86,7 @@ public class UserController {
         try {
             userService.validateEmail(user.getEmail());
             userService.validatePassword(user.getPassword());
-            user.setRole(Role.ADMIN);
+            user.setRole(ROLE_ADMIN);
             UUID userId = keycloakService.registerNewUser(user);
             user.setUserId(userId);
             userService.addUser(user);
@@ -123,7 +127,7 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getAllRegularUser() {
-        List<UUID> userIds = keycloakService.getUserIdsByRole(Role.USER);
+        List<UUID> userIds = keycloakService.getUserIdsByRole(ROLE_USER);
         List<User> userList = userService.getListOfUser(userIds);
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
@@ -138,7 +142,7 @@ public class UserController {
     @GetMapping("/admin")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getAllAdminUser() {
-        List<UUID> userIds = keycloakService.getUserIdsByRole(Role.ADMIN);
+        List<UUID> userIds = keycloakService.getUserIdsByRole(ROLE_ADMIN);
         List<User> userList = userService.getListOfUser(userIds);
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
@@ -195,14 +199,16 @@ public class UserController {
      *
      * @param userId id of the user.
      * @param image  new profile picture.
+     * @param jwt    authentication principal object in JWT form
      * @return success if operation is successful. Else returns 417-Expectation Failed.
      */
     @PostMapping("/image/{userId}")
     @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.principal.subject")
     public ResponseEntity<CustomHttpResponse> updatePhoto(@PathVariable UUID userId,
-                                                          @RequestParam MultipartFile image) {
+                                                          @RequestParam MultipartFile image,
+                                                          @AuthenticationPrincipal Jwt jwt) {
         try {
-            userService.updateProfileImage(userId, image);
+            userService.updateProfileImage(userId, image, jwt);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
                     "Failed to update profile image! Reason: " + ex.getMessage());
