@@ -8,6 +8,18 @@ package com.devrezaur.user.service.constant;
 public class UserServiceConstant {
 
     /**
+     * Constant for the standard user role.
+     * This role typically permits access to user-specific resources and actions within the application.
+     */
+    public static final String ROLE_USER = "USER";
+
+    /**
+     * Constant for the admin role.
+     * This role grants access to administrative resources and actions within the application.
+     */
+    public static final String ROLE_ADMIN = "ADMIN";
+
+    /**
      * Regular expression for validating email addresses.
      * The pattern enforces a basic structure for email addresses with proper domain extensions.
      */

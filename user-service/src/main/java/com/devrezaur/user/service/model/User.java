@@ -50,5 +50,5 @@ public class User {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Transient
-    private Role role;
+    private String role;
 }

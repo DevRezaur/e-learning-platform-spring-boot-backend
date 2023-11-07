@@ -2,7 +2,6 @@ package com.devrezaur.user.service.controller;
 
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
-import com.devrezaur.user.service.model.Role;
 import com.devrezaur.user.service.model.User;
 import com.devrezaur.user.service.service.KeycloakService;
 import com.devrezaur.user.service.service.UserService;
@@ -16,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static com.devrezaur.user.service.constant.UserServiceConstant.ROLE_ADMIN;
+import static com.devrezaur.user.service.constant.UserServiceConstant.ROLE_USER;
 
 /**
  * Main controller class for the application 'user-service'.
@@ -56,7 +58,7 @@ public class UserController {
         try {
             userService.validateEmail(user.getEmail());
             userService.validatePassword(user.getPassword());
-            user.setRole(Role.USER);
+            user.setRole(ROLE_USER);
             UUID userId = keycloakService.registerNewUser(user);
             user.setUserId(userId);
             userService.addUser(user);
@@ -82,7 +84,7 @@ public class UserController {
         try {
             userService.validateEmail(user.getEmail());
             userService.validatePassword(user.getPassword());
-            user.setRole(Role.ADMIN);
+            user.setRole(ROLE_ADMIN);
             UUID userId = keycloakService.registerNewUser(user);
             user.setUserId(userId);
             userService.addUser(user);
@@ -123,7 +125,7 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getAllRegularUser() {
-        List<UUID> userIds = keycloakService.getUserIdsByRole(Role.USER);
+        List<UUID> userIds = keycloakService.getUserIdsByRole(ROLE_USER);
         List<User> userList = userService.getListOfUser(userIds);
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
@@ -138,7 +140,7 @@ public class UserController {
     @GetMapping("/admin")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getAllAdminUser() {
-        List<UUID> userIds = keycloakService.getUserIdsByRole(Role.ADMIN);
+        List<UUID> userIds = keycloakService.getUserIdsByRole(ROLE_ADMIN);
         List<User> userList = userService.getListOfUser(userIds);
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
     }
