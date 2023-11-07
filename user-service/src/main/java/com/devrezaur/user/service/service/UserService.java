@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static com.devrezaur.common.module.constant.CommonConstant.CONTENT_TYPE_HEADER_KEY;
-import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
+import static com.devrezaur.common.module.constant.CommonConstant.*;
 import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_EMAIL_REGEX;
 import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_PASSWORD_REGEX;
 
@@ -108,9 +108,10 @@ public class UserService {
      *
      * @param userId UUID of the user for whom to update the profile image.
      * @param image  multipart file containing the new image.
+     * @param jwt    authentication principal object in JWT form
      * @throws Exception if the user is not found or an error occurs during the image update.
      */
-    public void updateProfileImage(UUID userId, MultipartFile image) throws Exception {
+    public void updateProfileImage(UUID userId, MultipartFile image, Jwt jwt) throws Exception {
         User existingUser = userRepository.findByUserId(userId);
         if (existingUser == null) {
             throw new Exception("User with id - " + userId + " not found!");
@@ -118,7 +119,10 @@ public class UserService {
         CustomHttpRequest customHttpRequest = new CustomHttpRequest();
         customHttpRequest.setRequestId(MDC.get(REQUEST_ID));
         customHttpRequest.setMethodType(HttpMethod.POST);
-        customHttpRequest.setHeaderParameterMap(Map.of(CONTENT_TYPE_HEADER_KEY, MediaType.MULTIPART_FORM_DATA_VALUE));
+        customHttpRequest.setHeaderParameterMap(Map.of(
+                CONTENT_TYPE_HEADER_KEY, MediaType.MULTIPART_FORM_DATA_VALUE,
+                AUTHORIZATION_HEADER, BEARER_PREFIX + jwt.getTokenValue())
+        );
         customHttpRequest.setBodyMap(Map.of("contents", image.getResource()));
         customHttpRequest.setUrl(contentDeliveryServiceBaseUrl + "/content");
         try {
