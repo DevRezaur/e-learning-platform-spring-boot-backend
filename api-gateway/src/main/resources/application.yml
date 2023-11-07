@@ -19,6 +19,14 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/user-service/user/**
+        - id: course-management-service
+          uri: lb://course-management-service
+          predicates:
+            - Path=/course-management-service/course/**
+        - id: content-delivery-service
+          uri: lb://content-delivery-service
+          predicates:
+            - Path=/content-delivery-service/content/**
 
 eureka:
   client:
