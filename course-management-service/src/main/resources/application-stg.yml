@@ -7,15 +7,13 @@ spring:
   jpa:
     open-in-view: false
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    database: postgresql
+    hibernate:
+      ddl-auto: update
   datasource:
-    url: jdbc:h2:mem:course-management-service-db
-    driver-class-name: org.h2.Driver
-    username: root
+    url: jdbc:postgresql://localhost:5432/course_management_service_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
     password: root
   security:
     oauth2:
