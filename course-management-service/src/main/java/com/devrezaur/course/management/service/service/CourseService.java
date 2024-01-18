@@ -2,6 +2,7 @@ package com.devrezaur.course.management.service.service;
 
 import com.devrezaur.course.management.service.model.Course;
 import com.devrezaur.course.management.service.repository.CourseRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,12 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public List<Course> getAllCourses(Integer pageNumber, Integer limit) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, limit);
+        return courseRepository.findAllBy(pageRequest);
     }
 
-    public Course getCourseByUserId(UUID courseId) {
+    public Course getCourseByCourseId(UUID courseId) {
         return courseRepository.findByCourseId(courseId);
     }
 
@@ -45,6 +47,7 @@ public class CourseService {
         existingCourse.setDescription(course.getDescription());
         existingCourse.setIsEnrollmentEnabled(course.getIsEnrollmentEnabled());
         existingCourse.setCourseFee(course.getCourseFee());
+        existingCourse.setDiscount(course.getDiscount());
         courseRepository.save(existingCourse);
     }
 
