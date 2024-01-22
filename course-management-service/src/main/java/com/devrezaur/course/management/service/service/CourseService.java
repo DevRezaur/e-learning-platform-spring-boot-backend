@@ -2,13 +2,18 @@ package com.devrezaur.course.management.service.service;
 
 import com.devrezaur.course.management.service.model.Course;
 import com.devrezaur.course.management.service.repository.CourseRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class CourseService {
+
+    private static final Integer DEFAULT_PAGE_NUMBER = 0;
+    private static final Integer DEFAULT_LIMIT = 10;
 
     private final CourseRepository courseRepository;
 
@@ -16,11 +21,14 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public List<Course> getAllCourses(Integer pageNumber, Integer limit) {
+        pageNumber = Optional.ofNullable(pageNumber).orElse(DEFAULT_PAGE_NUMBER);
+        limit = Optional.ofNullable(limit).orElse(DEFAULT_LIMIT);
+        PageRequest pageRequest = PageRequest.of(pageNumber, limit);
+        return courseRepository.findAllBy(pageRequest);
     }
 
-    public Course getCourseByUserId(UUID courseId) {
+    public Course getCourseByCourseId(UUID courseId) {
         return courseRepository.findByCourseId(courseId);
     }
 
@@ -45,6 +53,7 @@ public class CourseService {
         existingCourse.setDescription(course.getDescription());
         existingCourse.setIsEnrollmentEnabled(course.getIsEnrollmentEnabled());
         existingCourse.setCourseFee(course.getCourseFee());
+        existingCourse.setDiscount(course.getDiscount());
         courseRepository.save(existingCourse);
     }
 

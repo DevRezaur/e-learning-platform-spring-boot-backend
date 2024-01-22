@@ -13,7 +13,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +52,28 @@ public class CourseController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<CustomHttpResponse> getAllCourses(@RequestParam @Nullable UUID userId) {
+    public ResponseEntity<CustomHttpResponse> getAllCourses(@RequestParam @Nullable Integer pageNumber,
+                                                            @RequestParam @Nullable Integer limit) {
         List<Course> courseList;
-        if (userId != null) {
+        try {
+            courseList = courseService.getAllCourses(pageNumber, limit);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to fetch course list! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
+    }
+
+    @GetMapping("/enrolled-courses")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<CustomHttpResponse> getAllEnrolledCourses(@RequestParam UUID userId) {
+        List<Course> courseList;
+        try {
             List<UUID> enrolledCourseIds = courseEnrollmentService.getEnrolledCourseIds(userId);
             courseList = courseService.getCourses(enrolledCourseIds);
-        } else {
-            courseList = courseService.getAllCourses();
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to fetch course list! Reason: " + ex.getMessage());
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
     }
@@ -61,7 +81,7 @@ public class CourseController {
     @GetMapping("/{courseId}")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getCourseById(@PathVariable UUID courseId) {
-        Course course = courseService.getCourseByUserId(courseId);
+        Course course = courseService.getCourseByCourseId(courseId);
         if (course == null) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.NOT_FOUND, "404",
                     "No course found for this course id!");
