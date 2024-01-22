@@ -1,0 +1,30 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /course-management-service
+
+spring:
+  jpa:
+    open-in-view: false
+    show-sql: true
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/course_management_service_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: root
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/realms/e-learning-platform/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/realms/e-learning-platform
+
+connection:
+  timeout: 3000
+
+service:
+  user-service:
+    base-url: http://localhost:8081/user-service

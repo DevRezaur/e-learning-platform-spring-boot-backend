@@ -1,7 +1,14 @@
 package com.devrezaur.course.management.service.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -24,9 +31,15 @@ public class Course {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "is_enrollment_enabled")
     private Boolean isEnrollmentEnabled;
 
     @Column(name = "course_fee")
     private Integer courseFee;
+
+    @Column(name = "discount")
+    private Integer discount;
 }
