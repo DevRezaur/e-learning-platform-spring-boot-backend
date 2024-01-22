@@ -6,10 +6,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class CourseService {
+
+    private static final Integer DEFAULT_PAGE_NUMBER = 0;
+    private static final Integer DEFAULT_LIMIT = 10;
 
     private final CourseRepository courseRepository;
 
@@ -18,6 +22,8 @@ public class CourseService {
     }
 
     public List<Course> getAllCourses(Integer pageNumber, Integer limit) {
+        pageNumber = Optional.ofNullable(pageNumber).orElse(DEFAULT_PAGE_NUMBER);
+        limit = Optional.ofNullable(limit).orElse(DEFAULT_LIMIT);
         PageRequest pageRequest = PageRequest.of(pageNumber, limit);
         return courseRepository.findAllBy(pageRequest);
     }
