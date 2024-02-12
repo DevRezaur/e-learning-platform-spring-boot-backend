@@ -39,7 +39,7 @@ public class WebFluxSecurityConfiguration {
                         .anyExchange().permitAll()
                 )
                 .oauth2ResourceServer(resourceServerSpec -> resourceServerSpec
-                        .jwt(jwtSpec -> jwtSpec
+                        .jwt(jwtConfigurer -> jwtConfigurer
                                 .jwtAuthenticationConverter(new KeycloakReactiveRoleConverter())
                         )
                 )
