@@ -4,29 +4,15 @@ server:
 spring:
   application:
     name: api-gateway
-  main:
-    web-application-type: reactive
   security:
     oauth2:
       resourceserver:
         jwt:
           jwk-set-uri: http://localhost:8080/realms/e-learning-platform/protocol/openid-connect/certs
           issuer-uri: http://localhost:8080/realms/e-learning-platform
-  cloud:
-    gateway:
-      routes:
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/user-service/user/**
-        - id: course-management-service
-          uri: lb://course-management-service
-          predicates:
-            - Path=/course-management-service/course/**
-        - id: content-delivery-service
-          uri: lb://content-delivery-service
-          predicates:
-            - Path=/content-delivery-service/content/**
+
+connection:
+  timeout: 3000
 
 eureka:
   client:
