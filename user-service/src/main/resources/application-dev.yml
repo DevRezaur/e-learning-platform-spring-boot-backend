@@ -1,7 +1,5 @@
 server:
   port: 8081
-  servlet:
-    context-path: /user-service
 
 spring:
   application:
@@ -38,7 +36,7 @@ keycloak:
   server-url: http://localhost:8080
   realm-name: e-learning-platform
   admin-cli-client-id: admin-cli
-  admin-cli-client-secret: 6dpnnNwXp28QfURc7FY45Zanp3BNatGY
+  admin-cli-client-secret: kZFl70mCKkM40ZumjFdJMlXFJEGSUJ4t
 
 service:
   content-delivery-service:
