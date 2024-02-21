@@ -122,7 +122,7 @@ public class HttpCallLogic {
 
     private boolean isMultipartFormDataHeaderPresent(CustomHttpRequest customHttpRequest) {
         Map<String, String> headerParameterMap = customHttpRequest.getHeaderParameterMap();
-        if (headerParameterMap != null && !headerParameterMap.isEmpty()) {
+        if (headerParameterMap != null && headerParameterMap.containsKey(CONTENT_TYPE_HEADER_KEY)) {
             return headerParameterMap.get(CONTENT_TYPE_HEADER_KEY).equals(MediaType.MULTIPART_FORM_DATA_VALUE);
         }
         return false;
