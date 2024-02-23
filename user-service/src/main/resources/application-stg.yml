@@ -27,15 +27,8 @@ eureka:
     service-url:
       default-zone: http://localhost:8761/eureka
 
-connection:
-  timeout: 3000
-
 keycloak:
   server-url: http://localhost:8080
   realm-name: e-learning-platform
   admin-cli-client-id: admin-cli
   admin-cli-client-secret: kZFl70mCKkM40ZumjFdJMlXFJEGSUJ4t
-
-service:
-  content-delivery-service:
-    base-url: http://localhost:9191/content-delivery-service

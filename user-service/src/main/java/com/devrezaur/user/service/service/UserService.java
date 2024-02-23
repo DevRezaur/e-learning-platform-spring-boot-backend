@@ -1,26 +1,14 @@
 package com.devrezaur.user.service.service;
 
-import com.devrezaur.common.module.model.CustomHttpRequest;
-import com.devrezaur.common.module.model.CustomHttpResponse;
-import com.devrezaur.common.module.util.HttpCallLogic;
 import com.devrezaur.user.service.model.User;
 import com.devrezaur.user.service.repository.UserRepository;
-import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static com.devrezaur.common.module.constant.CommonConstant.*;
 import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_EMAIL_REGEX;
 import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_PASSWORD_REGEX;
 
@@ -34,20 +22,14 @@ import static com.devrezaur.user.service.constant.UserServiceConstant.VALID_PASS
 @Service
 public class UserService {
 
-    @Value("${service.content-delivery-service.base-url}")
-    private String contentDeliveryServiceBaseUrl;
-
-    private final HttpCallLogic httpCallLogic;
     private final UserRepository userRepository;
 
     /**
      * Constructor for UserService class.
      *
-     * @param httpCallLogic  instance of HttpClassLogic class.
      * @param userRepository instance of UserRepository interface.
      */
-    public UserService(HttpCallLogic httpCallLogic, UserRepository userRepository) {
-        this.httpCallLogic = httpCallLogic;
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -106,33 +88,17 @@ public class UserService {
     /**
      * Updates the user's profile image.
      *
-     * @param userId UUID of the user for whom to update the profile image.
-     * @param image  multipart file containing the new image.
-     * @param jwt    authentication principal object in JWT form
+     * @param userId   UUID of the user for whom to update the profile image.
+     * @param imageUrl new image location url.
      * @throws Exception if the user is not found or an error occurs during the image update.
      */
-    public void updateProfileImage(UUID userId, MultipartFile image, Jwt jwt) throws Exception {
+    public void updateProfileImage(UUID userId, String imageUrl) throws Exception {
         User existingUser = userRepository.findByUserId(userId);
         if (existingUser == null) {
             throw new Exception("User with id - " + userId + " not found!");
         }
-        CustomHttpRequest customHttpRequest = new CustomHttpRequest();
-        customHttpRequest.setRequestId(MDC.get(REQUEST_ID));
-        customHttpRequest.setMethodType(HttpMethod.POST);
-        customHttpRequest.setHeaderParameterMap(Map.of(
-                CONTENT_TYPE_HEADER_KEY, MediaType.MULTIPART_FORM_DATA_VALUE,
-                AUTHORIZATION_HEADER, BEARER_PREFIX + jwt.getTokenValue())
-        );
-        customHttpRequest.setBodyMap(Map.of("contents", image.getResource()));
-        customHttpRequest.setUrl(contentDeliveryServiceBaseUrl + "/content");
-        try {
-            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
-            List<String> urlIds = (List<String>) responseEntity.getBody().getResponseBody().get("urlList");
-            existingUser.setImageUrl(urlIds.get(0));
-            userRepository.save(existingUser);
-        } catch (Exception ex) {
-            throw new Exception("Error occurred while calling CONTENT-DELIVERY-SERVICE!");
-        }
+        existingUser.setImageUrl(imageUrl);
+        userRepository.save(existingUser);
     }
 
     /**

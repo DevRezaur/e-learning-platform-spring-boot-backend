@@ -9,10 +9,12 @@ import org.keycloak.admin.client.resource.UserResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -197,18 +199,14 @@ public class UserController {
      * To use this API, client application needs to pass access token of that particular user.
      * Or it needs to pass access token with role 'ADMIN'.
      *
-     * @param userId id of the user.
-     * @param image  new profile picture.
-     * @param jwt    authentication principal object in JWT form
+     * @param imageUrlMap map containing user id and image url data.
      * @return success if operation is successful. Else returns 417-Expectation Failed.
      */
-    @PostMapping("/image/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.principal.subject")
-    public ResponseEntity<CustomHttpResponse> updatePhoto(@PathVariable UUID userId,
-                                                          @RequestParam MultipartFile image,
-                                                          @AuthenticationPrincipal Jwt jwt) {
+    @PostMapping("/image")
+    @PreAuthorize("hasRole('ADMIN') or #imageUrlMap.get('userId') == authentication.principal.subject")
+    public ResponseEntity<CustomHttpResponse> updatePhoto(@RequestBody Map<String, String> imageUrlMap) {
         try {
-            userService.updateProfileImage(userId, image, jwt);
+            userService.updateProfileImage(UUID.fromString(imageUrlMap.get("userId")), imageUrlMap.get("imageUrl"));
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
                     "Failed to update profile image! Reason: " + ex.getMessage());
@@ -223,18 +221,17 @@ public class UserController {
      * To use this API, client application needs to pass access token of that particular user.
      * Or it needs to pass access token with role 'ADMIN'.
      *
-     * @param userId      id of the user.
-     * @param passwordMap map containing new password.
+     * @param passwordMap map containing user id and new password.
      * @return success if operation is successful. Else returns 417-Expectation Failed.
      */
-    @PostMapping("/password/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.principal.subject")
-    public ResponseEntity<CustomHttpResponse> updatePassword(@PathVariable UUID userId,
-                                                             @RequestBody Map<String, String> passwordMap) {
+    @PostMapping("/password")
+    @PreAuthorize("hasRole('ADMIN') or #passwordMap.get('userId') == authentication.principal.subject")
+    public ResponseEntity<CustomHttpResponse> updatePassword(@RequestBody Map<String, String> passwordMap) {
         try {
+            String userId = passwordMap.get("userId");
             String password = passwordMap.get("password");
             userService.validatePassword(password);
-            UserResource userResource = keycloakService.getUserResourceById(userId.toString());
+            UserResource userResource = keycloakService.getUserResourceById(userId);
             keycloakService.updateUserCredentials(userResource, password);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
