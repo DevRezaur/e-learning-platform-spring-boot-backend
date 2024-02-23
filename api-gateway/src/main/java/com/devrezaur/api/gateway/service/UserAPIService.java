@@ -52,4 +52,21 @@ public class UserAPIService {
             throw new Exception("Error occurred while calling USER-SERVICE!");
         }
     }
+
+    public String updateUserPhoto(UUID userId, String imageUrl, String accessToken) throws Exception {
+        String url = "user-service/user/image";
+        Map<String, String> headerParameterMap = new HashMap<>();
+        headerParameterMap.put(AUTHORIZATION_HEADER, accessToken);
+        Map<String, Object> bodyMap = new HashMap<>();
+        bodyMap.put("userId", userId);
+        bodyMap.put("imageUrl", imageUrl);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, headerParameterMap,
+                null, bodyMap);
+        try {
+            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
+            return (String) responseEntity.getBody().getResponseBody().get("message");
+        } catch (Exception ex) {
+            throw new Exception("Error occurred while calling USER-SERVICE!");
+        }
+    }
 }

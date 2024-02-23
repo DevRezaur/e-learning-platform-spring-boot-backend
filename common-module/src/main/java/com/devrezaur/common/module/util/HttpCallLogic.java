@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -108,14 +109,8 @@ public class HttpCallLogic {
     private Map<String, ?> prepareRequestBody(CustomHttpRequest customHttpRequest) {
         Map<String, Object> bodyMap = customHttpRequest.getBodyMap();
         boolean isMultipartFormDataHeaderPresent = isMultipartFormDataHeaderPresent(customHttpRequest);
-        if (isMultipartFormDataHeaderPresent) {
-            MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
-            if (bodyMap != null && !bodyMap.isEmpty()) {
-                for (Map.Entry<String, Object> element : bodyMap.entrySet()) {
-                    requestBody.add(element.getKey(), element.getValue());
-                }
-            }
-            return requestBody;
+        if (isMultipartFormDataHeaderPresent && bodyMap != null && !bodyMap.isEmpty()) {
+            return prepareMultiValueRequestBody(bodyMap);
         }
         return bodyMap;
     }
@@ -126,5 +121,19 @@ public class HttpCallLogic {
             return headerParameterMap.get(CONTENT_TYPE_HEADER_KEY).equals(MediaType.MULTIPART_FORM_DATA_VALUE);
         }
         return false;
+    }
+
+    private MultiValueMap<String, Object> prepareMultiValueRequestBody(Map<String, Object> bodyMap) {
+        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+        for (Map.Entry<String, Object> element : bodyMap.entrySet()) {
+            if (element.getValue() instanceof MultipartFile[] multipartFiles) {
+                for (MultipartFile multipartFile : multipartFiles) {
+                    requestBody.add(element.getKey(), multipartFile.getResource());
+                }
+            } else {
+                requestBody.add(element.getKey(), element.getValue());
+            }
+        }
+        return requestBody;
     }
 }
