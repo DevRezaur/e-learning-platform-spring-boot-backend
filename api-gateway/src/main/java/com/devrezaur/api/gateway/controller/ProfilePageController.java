@@ -74,4 +74,17 @@ public class ProfilePageController {
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message", message));
     }
+
+    @PostMapping("/password")
+    public ResponseEntity<CustomHttpResponse> updatePassword(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
+                                                             @RequestBody Map<String, String> passwordMap) {
+        String message;
+        try {
+            message = userAPIService.updatePassword(passwordMap.get("userId"), passwordMap.get("password"), accessToken);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
+                    "Failed to update password! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message", message));
+    }
 }

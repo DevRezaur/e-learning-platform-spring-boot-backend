@@ -69,4 +69,21 @@ public class UserAPIService {
             throw new Exception("Error occurred while calling USER-SERVICE!");
         }
     }
+
+    public String updatePassword(String userId, String password, String accessToken) throws Exception {
+        String url = "user-service/user/password";
+        Map<String, String> headerParameterMap = new HashMap<>();
+        headerParameterMap.put(AUTHORIZATION_HEADER, accessToken);
+        Map<String, Object> bodyMap = new HashMap<>();
+        bodyMap.put("userId", userId);
+        bodyMap.put("password", password);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, headerParameterMap,
+                null, bodyMap);
+        try {
+            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
+            return (String) responseEntity.getBody().getResponseBody().get("message");
+        } catch (Exception ex) {
+            throw new Exception("Error occurred while calling USER-SERVICE!");
+        }
+    }
 }
