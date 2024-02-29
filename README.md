@@ -16,6 +16,6 @@
 
 ### Have Any Feedback? Or Want to Collaborate?
 
-Send me mail at: `rezaur.official@gmail.com`
+Send mail at: `rezaur.official@gmail.com`
 
 Follow me in LinkedIn: https://www.linkedin.com/in/rezaurofficial
