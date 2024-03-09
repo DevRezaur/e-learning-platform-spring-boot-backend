@@ -7,12 +7,17 @@ import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.devrezaur.common.module.constant.CommonConstant.AUTHORIZATION_HEADER;
 
 @RestController
 @RequestMapping("/course-page-api")
@@ -36,4 +41,18 @@ public class CoursePageController {
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
     }
+
+    @PostMapping
+    public ResponseEntity<CustomHttpResponse> addCourse(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
+                                                        @RequestBody Map<String, Object> course) {
+        String message;
+        try {
+            message = courseAPIService.createNewCourse(course, accessToken);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to add course! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", message));
+    }
+
 }

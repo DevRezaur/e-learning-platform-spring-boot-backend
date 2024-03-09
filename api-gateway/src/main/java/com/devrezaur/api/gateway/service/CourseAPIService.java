@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.devrezaur.common.module.constant.CommonConstant.AUTHORIZATION_HEADER;
+
 @Service
 public class CourseAPIService {
 
@@ -35,6 +37,20 @@ public class CourseAPIService {
         try {
             ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
             return (List<Map<String, Object>>) responseEntity.getBody().getResponseBody().get("courseList");
+        } catch (Exception ex) {
+            throw new Exception("Error occurred while calling COURSE-MANAGEMENT-SERVICE!");
+        }
+    }
+
+    public String createNewCourse(Map<String, Object> course, String accessToken) throws Exception {
+        String url = "course-management-service/course";
+        Map<String, String> headerParameterMap = new HashMap<>();
+        headerParameterMap.put(AUTHORIZATION_HEADER, accessToken);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, headerParameterMap,
+                null, course);
+        try {
+            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
+            return (String) responseEntity.getBody().getResponseBody().get("message");
         } catch (Exception ex) {
             throw new Exception("Error occurred while calling COURSE-MANAGEMENT-SERVICE!");
         }
