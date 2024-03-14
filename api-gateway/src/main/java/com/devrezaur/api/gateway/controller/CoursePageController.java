@@ -7,6 +7,7 @@ import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.devrezaur.common.module.constant.CommonConstant.AUTHORIZATION_HEADER;
 
@@ -42,6 +44,18 @@ public class CoursePageController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
     }
 
+    @GetMapping("/{courseId}")
+    public ResponseEntity<CustomHttpResponse> getCourseById(@PathVariable UUID courseId) {
+        Map<String, Object> course;
+        try {
+            course = courseAPIService.getCourseById(courseId);
+        } catch (Exception e) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.NOT_FOUND, "404",
+                    "No course found for this course id!");
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("course", course));
+    }
+
     @PostMapping
     public ResponseEntity<CustomHttpResponse> addCourse(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
                                                         @RequestBody Map<String, Object> course) {
@@ -51,6 +65,19 @@ public class CoursePageController {
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to add course! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", message));
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<CustomHttpResponse> updateCourse(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
+                                                           @RequestBody Map<String, Object> course) {
+        String message;
+        try {
+            message = courseAPIService.updateCourse(course, accessToken);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to update course! Reason: " + ex.getMessage());
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", message));
     }

@@ -79,7 +79,6 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<CustomHttpResponse> getCourseById(@PathVariable UUID courseId) {
         Course course = courseService.getCourseByCourseId(courseId);
         if (course == null) {

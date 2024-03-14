@@ -51,6 +51,7 @@ public class CourseService {
         }
         existingCourse.setCourseName(course.getCourseName());
         existingCourse.setDescription(course.getDescription());
+        existingCourse.setImageUrl(course.getImageUrl());
         existingCourse.setIsEnrollmentEnabled(course.getIsEnrollmentEnabled());
         existingCourse.setCourseFee(course.getCourseFee());
         existingCourse.setDiscount(course.getDiscount());
