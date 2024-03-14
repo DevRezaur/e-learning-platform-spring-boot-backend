@@ -39,6 +39,18 @@ public class UserAPIService {
         }
     }
 
+    public String registerRegularUser(Map<String, Object> userData) throws Exception {
+        String url = "user-service/user";
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, null,
+                null, userData);
+        try {
+            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
+            return (String) responseEntity.getBody().getResponseBody().get("message");
+        } catch (Exception ex) {
+            throw new Exception("Error occurred while calling USER-SERVICE!");
+        }
+    }
+
     public String updateUserData(Map<String, Object> user, String accessToken) throws Exception {
         String url = "user-service/user/profile";
         Map<String, String> headerParameterMap = new HashMap<>();
