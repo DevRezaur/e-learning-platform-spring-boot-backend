@@ -42,7 +42,7 @@ public class CourseController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomHttpResponse> addCourse(@RequestBody Course course) {
         try {
-            courseService.addCourses(course);
+            courseService.addCourse(course);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to add course! Reason: " + ex.getMessage());
