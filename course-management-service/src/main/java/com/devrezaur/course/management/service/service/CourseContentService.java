@@ -41,6 +41,7 @@ public class CourseContentService {
         if (existingCourseContent == null) {
             throw new Exception("Course content with id - " + courseContent.getContentId() + " not found!");
         }
+        existingCourseContent.setContentTitle(courseContent.getContentTitle());
         existingCourseContent.setContentType(courseContent.getContentType());
         existingCourseContent.setContentType(courseContent.getContentUrl());
         existingCourseContent.setContentSequence(courseContent.getContentSequence());

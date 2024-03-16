@@ -28,6 +28,9 @@ public class CourseContent {
     @Column(name = "course_id")
     private UUID courseId;
 
+    @Column(name = "content_title")
+    private String contentTitle;
+
     @Column(name = "content_type")
     private String contentType;
 

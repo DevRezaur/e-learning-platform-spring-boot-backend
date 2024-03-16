@@ -59,19 +59,23 @@ public class CoursePageController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("course", course));
     }
 
-    @GetMapping("/{courseId}/details")
-    public ResponseEntity<CustomHttpResponse> getCourseDetailsById(@PathVariable UUID courseId) {
+    @GetMapping("/{courseId}/preview")
+    public ResponseEntity<CustomHttpResponse> getCoursePreviewById(@PathVariable UUID courseId) {
         Map<String, Object> course;
         try {
             course = courseAPIService.getCourseById(courseId);
             List<Map<String, Object>> courseContents = courseContentAPIService.getCourseContents(courseId,
                     null, null);
+            courseContents.forEach(courseContent -> {
+                courseContent.remove("contentType");
+                courseContent.remove("contentUrl");
+            });
             course.put("courseContents", courseContents);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.NOT_FOUND, "404",
                     "No course found for this course id!");
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseDetails", course));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("coursePreview", course));
     }
 
     @PostMapping
