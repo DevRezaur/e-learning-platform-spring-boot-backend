@@ -1,6 +1,7 @@
 package com.devrezaur.api.gateway.controller;
 
 import com.devrezaur.api.gateway.service.CourseAPIService;
+import com.devrezaur.api.gateway.service.CourseContentAPIService;
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
 import jakarta.annotation.Nullable;
@@ -26,9 +27,11 @@ import static com.devrezaur.common.module.constant.CommonConstant.AUTHORIZATION_
 public class CoursePageController {
 
     private final CourseAPIService courseAPIService;
+    private final CourseContentAPIService courseContentAPIService;
 
-    public CoursePageController(CourseAPIService courseAPIService) {
+    public CoursePageController(CourseAPIService courseAPIService, CourseContentAPIService courseContentAPIService) {
         this.courseAPIService = courseAPIService;
+        this.courseContentAPIService = courseContentAPIService;
     }
 
     @GetMapping
@@ -54,6 +57,21 @@ public class CoursePageController {
                     "No course found for this course id!");
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("course", course));
+    }
+
+    @GetMapping("/{courseId}/details")
+    public ResponseEntity<CustomHttpResponse> getCourseDetailsById(@PathVariable UUID courseId) {
+        Map<String, Object> course;
+        try {
+            course = courseAPIService.getCourseById(courseId);
+            List<Map<String, Object>> courseContents = courseContentAPIService.getCourseContents(courseId,
+                    null, null);
+            course.put("courseContents", courseContents);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.NOT_FOUND, "404",
+                    "No course found for this course id!");
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseDetails", course));
     }
 
     @PostMapping

@@ -13,7 +13,7 @@ import java.util.UUID;
 public class CourseContentService {
 
     private static final Integer DEFAULT_PAGE_NUMBER = 0;
-    private static final Integer DEFAULT_LIMIT = 50;
+    private static final Integer DEFAULT_LIMIT = 100;
 
     private final CourseContentRepository courseContentRepository;
 
