@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.Date;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -42,6 +44,10 @@ public class PaymentInfo {
 
     @Column(name = "trx_id")
     private String trxId;
+
+    @CreationTimestamp
+    @Column(name = "date", nullable = false, updatable = false)
+    private Date date;
 
     @Column(name = "status")
     private String status;
