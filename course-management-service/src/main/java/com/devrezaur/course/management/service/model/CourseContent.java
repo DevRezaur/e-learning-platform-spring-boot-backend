@@ -17,29 +17,26 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "course_table")
-public class Course {
+@Table(name = "course_content_table")
+public class CourseContent {
 
     @Id
     @GeneratedValue
+    @Column(name = "content_id")
+    private UUID contentId;
+
     @Column(name = "course_id")
     private UUID courseId;
 
-    @Column(name = "course_name")
-    private String courseName;
+    @Column(name = "content_title")
+    private String contentTitle;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "content_type")
+    private String contentType;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "content_url")
+    private String contentUrl;
 
-    @Column(name = "is_enrollment_enabled")
-    private Boolean isEnrollmentEnabled;
-
-    @Column(name = "course_fee")
-    private Integer courseFee;
-
-    @Column(name = "discount")
-    private Integer discount;
+    @Column(name = "content_sequence")
+    private String contentSequence;
 }

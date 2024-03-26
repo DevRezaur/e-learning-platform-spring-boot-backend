@@ -1,7 +1,5 @@
 server:
   port: 8081
-  servlet:
-    context-path: /user-service
 
 spring:
   application:
@@ -9,15 +7,13 @@ spring:
   jpa:
     open-in-view: false
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    database: postgresql
+    hibernate:
+      ddl-auto: update
   datasource:
-    url: jdbc:h2:mem:user-service-db
-    driver-class-name: org.h2.Driver
-    username: root
+    url: jdbc:postgresql://localhost:5432/user_service_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
     password: root
   security:
     oauth2:
@@ -31,15 +27,8 @@ eureka:
     service-url:
       default-zone: http://localhost:8761/eureka
 
-connection:
-  timeout: 3000
-
 keycloak:
   server-url: http://localhost:8080
   realm-name: e-learning-platform
   admin-cli-client-id: admin-cli
-  admin-cli-client-secret: 6dpnnNwXp28QfURc7FY45Zanp3BNatGY
-
-service:
-  content-delivery-service:
-    base-url: http://localhost:9191/content-delivery-service
+  admin-cli-client-secret: kZFl70mCKkM40ZumjFdJMlXFJEGSUJ4t

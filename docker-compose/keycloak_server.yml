@@ -12,7 +12,7 @@ services:
       - "KC_DB_URL=jdbc:postgresql://host.docker.internal:5432/keycloak"
       - "KC_DB_SCHEMA=keycloak"
       - "KC_DB_USERNAME=postgres"
-      - "KC_DB_PASSWORD=10595"
+      - "KC_DB_PASSWORD=root"
     command:
       - "start-dev"
     extra_hosts:

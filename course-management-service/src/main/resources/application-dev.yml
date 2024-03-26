@@ -1,0 +1,37 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: course-management-service
+  jpa:
+    open-in-view: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    url: jdbc:h2:mem:course-management-service-db
+    driver-class-name: org.h2.Driver
+    username: root
+    password: root
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/realms/e-learning-platform/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/realms/e-learning-platform
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+
+connection:
+  timeout: 3000
+
+service:
+  user-service:
+    base-url: http://localhost:9191/user-service

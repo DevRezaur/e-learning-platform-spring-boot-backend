@@ -61,8 +61,9 @@ public class ContentService {
         for (MultipartFile content : contents) {
             String extension = StringUtils.getFilenameExtension(content.getOriginalFilename());
             String hash = generateHash(content.getName(), content.getContentType(), content.getSize());
-            urlList.add(fileUploadPath + "/" + hash + "." + extension);
-            storeContentToFileSystem(content, hash);
+            String fileName = hash + "." + extension;
+            urlList.add(fileUploadPath + "/" + fileName);
+            storeContentToFileSystem(content, fileName);
         }
         return urlList;
     }
@@ -102,12 +103,12 @@ public class ContentService {
     /**
      * Stores the content file to the file system using its unique hash as the filename.
      *
-     * @param content the multipart file representing the content file.
-     * @param hash    the unique hash used as the filename.
+     * @param content  the multipart file representing the content file.
+     * @param fileName the unique filename for the content.
      * @throws IOException if an error occurs during file storage.
      */
-    private void storeContentToFileSystem(MultipartFile content, String hash) throws IOException {
-        Path targetLocation = storageLocation.resolve(hash);
+    private void storeContentToFileSystem(MultipartFile content, String fileName) throws IOException {
+        Path targetLocation = storageLocation.resolve(fileName);
         Files.copy(content.getInputStream(), targetLocation);
     }
 }

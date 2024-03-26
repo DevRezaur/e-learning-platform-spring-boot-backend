@@ -1,7 +1,5 @@
 server:
   port: 8082
-  servlet:
-    context-path: /content-delivery-service
 
 content:
   file-upload-path: file-system-storage
