@@ -56,6 +56,18 @@ public class CourseController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
     }
 
+    @GetMapping("/courses")
+    public ResponseEntity<CustomHttpResponse> getCourseByIds(@RequestParam List<UUID> courseIds) {
+        List<Course> courseList;
+        try {
+            courseList = courseService.getCourses(courseIds);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to fetch course list! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
+    }
+
     @GetMapping("/{courseId}")
     public ResponseEntity<CustomHttpResponse> getCourseById(@PathVariable UUID courseId) {
         Course course = courseService.getCourseByCourseId(courseId);
