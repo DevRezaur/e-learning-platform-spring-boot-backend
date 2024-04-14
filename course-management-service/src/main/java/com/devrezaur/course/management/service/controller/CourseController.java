@@ -3,16 +3,11 @@ package com.devrezaur.course.management.service.controller;
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
 import com.devrezaur.course.management.service.model.Course;
-import com.devrezaur.course.management.service.model.CourseEnrollmentInfo;
-import com.devrezaur.course.management.service.service.CourseEnrollmentService;
 import com.devrezaur.course.management.service.service.CourseService;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,11 +25,9 @@ import java.util.UUID;
 public class CourseController {
 
     private final CourseService courseService;
-    private final CourseEnrollmentService courseEnrollmentService;
 
-    public CourseController(CourseService courseService, CourseEnrollmentService courseEnrollmentService) {
+    public CourseController(CourseService courseService) {
         this.courseService = courseService;
-        this.courseEnrollmentService = courseEnrollmentService;
     }
 
     @PostMapping
@@ -57,20 +49,6 @@ public class CourseController {
         List<Course> courseList;
         try {
             courseList = courseService.getAllCourses(pageNumber, limit);
-        } catch (Exception ex) {
-            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
-                    "Failed to fetch course list! Reason: " + ex.getMessage());
-        }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
-    }
-
-    @GetMapping("/enrolled-courses")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<CustomHttpResponse> getAllEnrolledCourses(@RequestParam UUID userId) {
-        List<Course> courseList;
-        try {
-            List<UUID> enrolledCourseIds = courseEnrollmentService.getEnrolledCourseIds(userId);
-            courseList = courseService.getCourses(enrolledCourseIds);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to fetch course list! Reason: " + ex.getMessage());
@@ -100,35 +78,4 @@ public class CourseController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED,
                 Map.of("message", "Successfully updated course info"));
     }
-
-    @PostMapping("/enroll")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CustomHttpResponse> enrollToCourse(@RequestBody CourseEnrollmentInfo courseEnrollmentInfo) {
-        try {
-            courseEnrollmentService.enrollToCourse(courseEnrollmentInfo);
-        } catch (Exception ex) {
-            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
-                    "Failed to enroll to the course! Reason: " + ex.getMessage());
-        }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED,
-                Map.of("message", "Successfully enrolled to the course"));
-    }
-
-    @GetMapping("/enrolled-users/{courseId}")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public ResponseEntity<CustomHttpResponse> getEnrolledUsers(@PathVariable UUID courseId,
-                                                               @AuthenticationPrincipal Jwt jwt) {
-        List<Map<String, Object>> userList = new ArrayList<>();
-        try {
-            List<UUID> enrolledUserIds = courseEnrollmentService.getEnrolledUserIds(courseId);
-            if (!CollectionUtils.isEmpty(enrolledUserIds)) {
-                userList = courseEnrollmentService.fetchEnrolledUserInformation(enrolledUserIds, jwt);
-            }
-        } catch (Exception ex) {
-            return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "400",
-                    "Failed to get enrolled user information! Reason: " + ex.getMessage());
-        }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("userList", userList));
-    }
-
 }
