@@ -57,6 +57,20 @@ public class CourseAPIService {
         }
     }
 
+    public List<Map<String, Object>> getAllCoursesByIds(List<String> courseIds) throws Exception {
+        String url = "course-management-service/course/courses";
+        Map<String, Object> bodyMap = new HashMap<>();
+        bodyMap.put("courseIds", courseIds);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, null,
+                null, bodyMap);
+        try {
+            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
+            return (List<Map<String, Object>>) responseEntity.getBody().getResponseBody().get("courseList");
+        } catch (Exception ex) {
+            throw new Exception("Error occurred while calling COURSE-MANAGEMENT-SERVICE!");
+        }
+    }
+
     public String createNewCourse(Map<String, Object> course, String accessToken) throws Exception {
         String url = "course-management-service/course";
         Map<String, String> headerParameterMap = new HashMap<>();

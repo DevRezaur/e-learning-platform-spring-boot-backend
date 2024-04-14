@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/course")
@@ -56,10 +57,13 @@ public class CourseController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
     }
 
-    @GetMapping("/courses")
-    public ResponseEntity<CustomHttpResponse> getCourseByIds(@RequestParam List<UUID> courseIds) {
+    @PostMapping("/courses")
+    public ResponseEntity<CustomHttpResponse> getCourseByIds(@RequestBody Map<String, Object> courseIdsMap) {
         List<Course> courseList;
         try {
+            List<UUID> courseIds = ((List<String>) courseIdsMap.get("courseIds")).stream()
+                    .map(UUID::fromString)
+                    .collect(Collectors.toList());
             courseList = courseService.getCourses(courseIds);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",

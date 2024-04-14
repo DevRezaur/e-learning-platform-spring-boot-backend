@@ -2,6 +2,7 @@ package com.devrezaur.api.gateway.controller;
 
 import com.devrezaur.api.gateway.service.CourseAPIService;
 import com.devrezaur.api.gateway.service.CourseContentAPIService;
+import com.devrezaur.api.gateway.service.CourseEnrollmentAPIService;
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
 import jakarta.annotation.Nullable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -28,10 +30,13 @@ public class CoursePageController {
 
     private final CourseAPIService courseAPIService;
     private final CourseContentAPIService courseContentAPIService;
+    private final CourseEnrollmentAPIService courseEnrollmentAPIService;
 
-    public CoursePageController(CourseAPIService courseAPIService, CourseContentAPIService courseContentAPIService) {
+    public CoursePageController(CourseAPIService courseAPIService, CourseContentAPIService courseContentAPIService,
+                                CourseEnrollmentAPIService courseEnrollmentAPIService) {
         this.courseAPIService = courseAPIService;
         this.courseContentAPIService = courseContentAPIService;
+        this.courseEnrollmentAPIService = courseEnrollmentAPIService;
     }
 
     @GetMapping
@@ -104,4 +109,38 @@ public class CoursePageController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", message));
     }
 
+    @PostMapping("/enroll")
+    public ResponseEntity<CustomHttpResponse> enrollToCourse(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
+                                                             @RequestBody Map<String, Object> courseEnrollmentInfoMap) {
+        String message;
+        try {
+            message = courseEnrollmentAPIService.enrollToCourse(courseEnrollmentInfoMap, accessToken);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to enroll to the course! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", message));
+    }
+
+    @GetMapping("/enrolled-courses")
+    public ResponseEntity<CustomHttpResponse> getAllEnrolledCourses(
+            @RequestHeader(AUTHORIZATION_HEADER) String accessToken, @RequestParam UUID userId) {
+        List<Map<String, Object>> courseList;
+        try {
+            Map<String, String> enrolledCourseIdsWithStatusMap =
+                    courseEnrollmentAPIService.getAllEnrolledCourseIdsWithStatus(userId, accessToken);
+            List<String> courseIds = new ArrayList<>(enrolledCourseIdsWithStatusMap.keySet());
+            courseList = courseAPIService.getAllCoursesByIds(courseIds);
+            for (Map<String, Object> course : courseList) {
+                String courseId = course.get("courseId").toString();
+                if (enrolledCourseIdsWithStatusMap.containsKey(courseId)) {
+                    course.put("status", enrolledCourseIdsWithStatusMap.get(courseId));
+                }
+            }
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to fetch course list! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
+    }
 }
