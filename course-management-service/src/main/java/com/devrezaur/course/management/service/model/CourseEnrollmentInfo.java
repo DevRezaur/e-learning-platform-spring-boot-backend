@@ -26,4 +26,7 @@ public class CourseEnrollmentInfo {
 
     @Column(name = "user_id")
     private UUID userId;
+
+    @Column(name = "status")
+    private String status;
 }
