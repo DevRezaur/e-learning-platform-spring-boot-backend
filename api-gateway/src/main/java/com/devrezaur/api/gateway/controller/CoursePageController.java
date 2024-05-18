@@ -69,13 +69,9 @@ public class CoursePageController {
         Map<String, Object> course;
         try {
             course = courseAPIService.getCourseById(courseId);
-            List<Map<String, Object>> courseContents = courseContentAPIService.getCourseContents(courseId,
+            List<Map<String, Object>> courseContentsPreview = courseContentAPIService.getCourseContentsPreview(courseId,
                     null, null);
-            courseContents.forEach(courseContent -> {
-                courseContent.remove("contentType");
-                courseContent.remove("contentUrl");
-            });
-            course.put("courseContents", courseContents);
+            course.put("courseContents", courseContentsPreview);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.NOT_FOUND, "404",
                     "No course found for this course id!");

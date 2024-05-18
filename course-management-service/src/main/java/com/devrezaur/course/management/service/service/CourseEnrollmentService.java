@@ -18,9 +18,11 @@ public class CourseEnrollmentService {
         this.courseEnrollmentRepository = courseEnrollmentRepository;
     }
 
-    public void enrollToCourse(CourseEnrollmentInfo courseEnrollmentInfo) throws Exception {
-        if (isAlreadyEnrolled(courseEnrollmentInfo.getUserId(), courseEnrollmentInfo.getCourseId())) {
-            throw new Exception("The user is already enrolled in this course!");
+    public void enrollToCourse(CourseEnrollmentInfo courseEnrollmentInfo) {
+        CourseEnrollmentInfo existingCourseEnrollmentInfo = courseEnrollmentRepository.findByCourseIdAndUserId(
+                courseEnrollmentInfo.getCourseId(), courseEnrollmentInfo.getUserId());
+        if (existingCourseEnrollmentInfo != null) {
+            existingCourseEnrollmentInfo.setStatus(courseEnrollmentInfo.getStatus());
         }
         courseEnrollmentRepository.save(courseEnrollmentInfo);
     }
@@ -37,10 +39,5 @@ public class CourseEnrollmentService {
     public List<UUID> getEnrolledUserIds(UUID courseId) {
         List<CourseEnrollmentInfo> courseEnrollmentInfoList = courseEnrollmentRepository.findByCourseId(courseId);
         return courseEnrollmentInfoList.stream().map(CourseEnrollmentInfo::getUserId).toList();
-    }
-
-    private boolean isAlreadyEnrolled(UUID userId, UUID courseId) {
-        Map<UUID, String> enrolledCourseIdsWithStatusMap = getEnrolledCourseIdsWithStatus(userId);
-        return enrolledCourseIdsWithStatusMap.containsKey(courseId);
     }
 }

@@ -42,4 +42,25 @@ public class CourseContentAPIService {
             throw new Exception("Error occurred while calling COURSE-MANAGEMENT-SERVICE!");
         }
     }
+
+    public List<Map<String, Object>> getCourseContentsPreview(UUID courseId, Integer pageNumber, Integer limit)
+            throws Exception {
+        String url = "course-management-service/course-content/preview/{courseId}";
+        Map<String, String> urlParameterMap = new HashMap<>();
+        urlParameterMap.put("courseId", String.valueOf(courseId));
+        if (pageNumber != null) {
+            urlParameterMap.put("pageNumber", pageNumber.toString());
+        }
+        if (limit != null) {
+            urlParameterMap.put("limit", limit.toString());
+        }
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.GET, url, null,
+                urlParameterMap, null);
+        try {
+            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
+            return (List<Map<String, Object>>) responseEntity.getBody().getResponseBody().get("courseContentsPreview");
+        } catch (Exception ex) {
+            throw new Exception("Error occurred while calling COURSE-MANAGEMENT-SERVICE!");
+        }
+    }
 }

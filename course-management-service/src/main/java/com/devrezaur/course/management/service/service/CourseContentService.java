@@ -28,6 +28,18 @@ public class CourseContentService {
         return courseContentRepository.findByCourseId(courseId, pageRequest);
     }
 
+    public List<CourseContent> getAllCourseContentsPreview(UUID courseId, Integer pageNumber, Integer limit) {
+        pageNumber = Optional.ofNullable(pageNumber).orElse(DEFAULT_PAGE_NUMBER);
+        limit = Optional.ofNullable(limit).orElse(DEFAULT_LIMIT);
+        PageRequest pageRequest = PageRequest.of(pageNumber, limit);
+        List<CourseContent> courseContents = courseContentRepository.findByCourseId(courseId, pageRequest);
+        courseContents.forEach(courseContent -> {
+            courseContent.setContentType(null);
+            courseContent.setContentUrl(null);
+        });
+        return courseContents;
+    }
+
     public CourseContent getCourseContentByContentId(UUID contentId) {
         return courseContentRepository.findByContentId(contentId);
     }
