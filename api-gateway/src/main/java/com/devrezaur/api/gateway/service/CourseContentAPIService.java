@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.devrezaur.common.module.constant.CommonConstant.AUTHORIZATION_HEADER;
+
 @Service
 public class CourseContentAPIService {
 
@@ -22,9 +24,12 @@ public class CourseContentAPIService {
         this.httpCallLogic = httpCallLogic;
     }
 
-    public List<Map<String, Object>> getCourseContents(UUID courseId, Integer pageNumber, Integer limit)
+    public List<Map<String, Object>> getCourseContents(UUID courseId, Integer pageNumber, Integer limit,
+                                                       String accessToken)
             throws Exception {
         String url = "course-management-service/course-content/{courseId}";
+        Map<String, String> headerParameterMap = new HashMap<>();
+        headerParameterMap.put(AUTHORIZATION_HEADER, accessToken);
         Map<String, String> urlParameterMap = new HashMap<>();
         urlParameterMap.put("courseId", String.valueOf(courseId));
         if (pageNumber != null) {
@@ -33,7 +38,7 @@ public class CourseContentAPIService {
         if (limit != null) {
             urlParameterMap.put("limit", limit.toString());
         }
-        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.GET, url, null,
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.GET, url, headerParameterMap,
                 urlParameterMap, null);
         try {
             ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
