@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,10 +69,10 @@ public class ContentController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("urlList", urlList));
     }
 
-    @GetMapping("/stream")
-    public ResponseEntity<InputStreamResource> streamVideo(@RequestHeader HttpHeaders headers)
-            throws IOException {
-        File videoFile = new File("file-system-storage/dummy-video-1.mp4");
+    @GetMapping("/stream/file-system-storage/{videoUrl}")
+    public ResponseEntity<InputStreamResource> streamVideo(@RequestHeader HttpHeaders headers,
+                                                           @PathVariable String videoUrl) throws IOException {
+        File videoFile = new File("file-system-storage/" + videoUrl);
         InputStream videoStream = new FileInputStream(videoFile);
         long fileSize = videoFile.length();
 
