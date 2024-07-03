@@ -8,13 +8,9 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Service class for Keycloak admin API.
@@ -56,21 +52,18 @@ public class KeycloakService {
         userRepresentation.setFirstName(user.getFirstName());
         userRepresentation.setLastName(user.getLastName());
         userRepresentation.setEnabled(true);
+
         Response response = keycloak.realm(realmName).users().create(userRepresentation);
 
-        if (response.getStatus() == 201) {
-            try {
-                String keyCloakUserId = getKeyCloakUserId(user.getEmail());
-                UserResource userResource = getUserResourceById(keyCloakUserId);
-                updateUserRole(userResource, user.getRole());
-                updateUserCredentials(userResource, user.getPassword());
-                return UUID.fromString(keyCloakUserId);
-            } catch (Exception ex) {
-                throw new Exception("Unable to register user in auth server! Reason: " + ex.getMessage());
-            }
-        } else {
-            throw new Exception("Unable to register user in auth server! Reason: " + response.getStatusInfo());
+        if (response.getStatus() != 201) {
+            throw new Exception(response.getStatusInfo().toString());
         }
+
+        String keyCloakUserId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
+        updateUserCredentials(userRepresentation, user.getPassword());
+        updateUserRole(keyCloakUserId, user.getRole());
+
+        return UUID.fromString(keyCloakUserId);
     }
 
     /**
@@ -83,7 +76,7 @@ public class KeycloakService {
         UserResource userResource = getUserResourceById(user.getUserId().toString());
         UserRepresentation userRepresentation = userResource.toRepresentation();
         if (userRepresentation == null) {
-            throw new Exception("No user found in auth server with this email!");
+            throw new Exception("No such user found!");
         }
         userRepresentation.setFirstName(user.getFirstName());
         userRepresentation.setLastName(user.getLastName());
@@ -91,54 +84,39 @@ public class KeycloakService {
     }
 
     /**
-     * Retrieves the Keycloak user id associated with the provided email.
-     *
-     * @param email the email address of the user.
-     * @return Keycloak user id as a string.
-     * @throws Exception if no user is found with the given email.
-     */
-    private String getKeyCloakUserId(String email) throws Exception {
-        List<UserRepresentation> userRepresentationList = keycloak.realm(realmName).users().searchByEmail(email, true);
-        if (CollectionUtils.isEmpty(userRepresentationList)) {
-            throw new Exception("No user found in auth server with this email!");
-        }
-        return userRepresentationList.get(0).getId();
-    }
-
-    /**
      * Retrieves a UserResource object for a user with the specified id.
      *
-     * @param id the user's Keycloak id.
+     * @param keyCloakUserId the user's Keycloak id.
      * @return a UserResource object of the user.
      */
-    public UserResource getUserResourceById(String id) {
-        return keycloak.realm(realmName).users().get(id);
+    public UserResource getUserResourceById(String keyCloakUserId) {
+        return keycloak.realm(realmName).users().get(keyCloakUserId);
     }
 
     /**
      * Updates the role of a user in the Keycloak realm.
      *
-     * @param userResource the UserResource object representing the user.
-     * @param role         new role for the user.
+     * @param keyCloakUserId the user's Keycloak id.
+     * @param role           new role for the user.
      */
-    private void updateUserRole(UserResource userResource, String role) {
+    private void updateUserRole(String keyCloakUserId, String role) {
         List<RoleRepresentation> roleRepresentationList = new LinkedList<>();
         roleRepresentationList.add(keycloak.realm(realmName).roles().get(role).toRepresentation());
-        userResource.roles().realmLevel().add(roleRepresentationList);
+        keycloak.realm(realmName).users().get(keyCloakUserId).roles().realmLevel().add(roleRepresentationList);
     }
 
     /**
      * Updates the credentials of a user in the Keycloak realm.
      *
-     * @param userResource the UserResource object representing the user.
-     * @param password     new password for the user.
+     * @param userRepresentation the UserRepresentation object representing the user.
+     * @param password           new password for the user.
      */
-    public void updateUserCredentials(UserResource userResource, String password) {
+    public void updateUserCredentials(UserRepresentation userRepresentation, String password) {
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
         credentialRepresentation.setTemporary(false);
         credentialRepresentation.setValue(password);
-        userResource.resetPassword(credentialRepresentation);
+        userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
     }
 
     /**
@@ -149,8 +127,7 @@ public class KeycloakService {
      */
     public List<UUID> getUserIdsByRole(String role) {
         List<UUID> userIds = new ArrayList<>();
-        List<UserRepresentation> userRepresentationList =
-                keycloak.realm(realmName).roles().get(role).getUserMembers();
+        List<UserRepresentation> userRepresentationList = keycloak.realm(realmName).roles().get(role).getUserMembers();
         for (UserRepresentation userRepresentation : userRepresentationList) {
             userIds.add(UUID.fromString(userRepresentation.getId()));
         }
