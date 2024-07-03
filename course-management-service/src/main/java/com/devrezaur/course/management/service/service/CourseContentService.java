@@ -55,7 +55,7 @@ public class CourseContentService {
         }
         existingCourseContent.setContentTitle(courseContent.getContentTitle());
         existingCourseContent.setContentType(courseContent.getContentType());
-        existingCourseContent.setContentType(courseContent.getContentUrl());
+        existingCourseContent.setContentUrl(courseContent.getContentUrl());
         existingCourseContent.setContentSequence(courseContent.getContentSequence());
         courseContentRepository.save(existingCourseContent);
     }
