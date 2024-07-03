@@ -1,7 +1,11 @@
 package com.devrezaur.common.module.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.util.Map;
@@ -15,6 +19,6 @@ import java.util.Map;
 public class CustomHttpResponse {
     private HttpStatus httpStatus;
     private Map<String, Object> responseBody;
-    private String customErrorCode;
+    private String errorCode;
     private String errorMessage;
 }

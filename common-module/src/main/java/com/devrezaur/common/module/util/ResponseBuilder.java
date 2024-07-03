@@ -19,12 +19,12 @@ public class ResponseBuilder {
     }
 
     public static ResponseEntity<CustomHttpResponse> buildFailureResponse(HttpStatus httpStatus,
-                                                                          String customErrorCode,
+                                                                          String errorCode,
                                                                           String errorMessage) {
         CustomHttpResponse errorResponse = CustomHttpResponse
                 .builder()
                 .httpStatus(httpStatus)
-                .customErrorCode(customErrorCode)
+                .errorCode(errorCode)
                 .errorMessage(errorMessage)
                 .build();
         return new ResponseEntity<>(errorResponse, httpStatus);
