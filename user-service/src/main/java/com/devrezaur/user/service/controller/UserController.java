@@ -9,12 +9,7 @@ import org.keycloak.admin.client.resource.UserResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -96,8 +91,7 @@ public class UserController {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to add admin user! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED,
-                Map.of("message", "Successfully added admin user"));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", "Successfully added admin"));
     }
 
     /**
@@ -137,12 +131,12 @@ public class UserController {
     /**
      * API to list all the user with role 'ADMIN'.
      * <p>
-     * To use this API, client application needs to pass access token with either role 'ADMIN' or 'USER'.
+     * To use this API, client application needs to pass access token with role 'ADMIN'.
      *
      * @return list of user information found in the KeyCloak auth server with role 'ADMIN' and in 'user-service-db'.
      */
     @GetMapping("/admin")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomHttpResponse> getAllAdminUser() {
         List<UUID> userIds = keycloakService.getUserIdsByRole(ROLE_ADMIN);
         List<User> userList = userService.getListOfUser(userIds);
@@ -152,13 +146,13 @@ public class UserController {
     /**
      * API to fetch a list of user info with role 'ADMIN' & 'USER'.
      * <p>
-     * To use this API, client application needs to pass access token with either role 'ADMIN' or 'USER'.
+     * To use this API, client application needs to pass access token with role 'ADMIN'.
      *
      * @param userIdsMap map containing a list of user ids whose information is to be queried.
      * @return list of user information found in the 'user-service-db'.
      */
     @PostMapping("/list")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomHttpResponse> getListOfUser(@RequestBody Map<String, List<UUID>> userIdsMap) {
         List<User> userList;
         try {
@@ -194,7 +188,7 @@ public class UserController {
     }
 
     /**
-     * API to update user profile picture.
+     * API to update user profile picture url.
      * <p>
      * To use this API, client application needs to pass access token of that particular user.
      * Or it needs to pass access token with role 'ADMIN'.
@@ -204,9 +198,9 @@ public class UserController {
      */
     @PostMapping("/image")
     @PreAuthorize("hasRole('ADMIN') or #imageUrlMap.get('userId') == authentication.principal.subject")
-    public ResponseEntity<CustomHttpResponse> updatePhoto(@RequestBody Map<String, String> imageUrlMap) {
+    public ResponseEntity<CustomHttpResponse> updateImageUrl(@RequestBody Map<String, String> imageUrlMap) {
         try {
-            userService.updateProfileImage(UUID.fromString(imageUrlMap.get("userId")), imageUrlMap.get("imageUrl"));
+            userService.updateProfileImageUrl(UUID.fromString(imageUrlMap.get("userId")), imageUrlMap.get("imageUrl"));
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
                     "Failed to update profile image! Reason: " + ex.getMessage());

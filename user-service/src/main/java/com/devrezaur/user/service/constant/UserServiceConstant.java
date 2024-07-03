@@ -23,8 +23,8 @@ public class UserServiceConstant {
      * Regular expression for validating email addresses.
      * The pattern enforces a basic structure for email addresses with proper domain extensions.
      */
-    public static final String VALID_EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.a-zA-Z0-9_+&*-]+)" +
-            "*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    public static final String VALID_EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)" +
+            "*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z]{2,7})+$";
 
     /**
      * Regular expression for validating passwords.

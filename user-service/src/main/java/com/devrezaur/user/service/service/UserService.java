@@ -86,13 +86,13 @@ public class UserService {
     }
 
     /**
-     * Updates the user's profile image.
+     * Updates the user's profile image url.
      *
-     * @param userId   UUID of the user for whom to update the profile image.
-     * @param imageUrl new image location url.
+     * @param userId   UUID of the user for whom to update the profile image url.
+     * @param imageUrl new image url.
      * @throws Exception if the user is not found or an error occurs during the image update.
      */
-    public void updateProfileImage(UUID userId, String imageUrl) throws Exception {
+    public void updateProfileImageUrl(UUID userId, String imageUrl) throws Exception {
         User existingUser = userRepository.findByUserId(userId);
         if (existingUser == null) {
             throw new Exception("User with id - " + userId + " not found!");

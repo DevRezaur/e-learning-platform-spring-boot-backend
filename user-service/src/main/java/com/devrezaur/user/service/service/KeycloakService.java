@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Service class for Keycloak admin API.
@@ -60,8 +63,9 @@ public class KeycloakService {
         }
 
         String keyCloakUserId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
-        updateUserCredentials(userRepresentation, user.getPassword());
-        updateUserRole(keyCloakUserId, user.getRole());
+        UserResource userResource = getUserResourceById(keyCloakUserId);
+        updateUserCredentials(userResource, user.getPassword());
+        updateUserRole(userResource, user.getRole());
 
         return UUID.fromString(keyCloakUserId);
     }
@@ -96,27 +100,27 @@ public class KeycloakService {
     /**
      * Updates the role of a user in the Keycloak realm.
      *
-     * @param keyCloakUserId the user's Keycloak id.
-     * @param role           new role for the user.
+     * @param userResource the UserResource object representing the user.
+     * @param role         new role for the user.
      */
-    private void updateUserRole(String keyCloakUserId, String role) {
+    private void updateUserRole(UserResource userResource, String role) {
         List<RoleRepresentation> roleRepresentationList = new LinkedList<>();
         roleRepresentationList.add(keycloak.realm(realmName).roles().get(role).toRepresentation());
-        keycloak.realm(realmName).users().get(keyCloakUserId).roles().realmLevel().add(roleRepresentationList);
+        userResource.roles().realmLevel().add(roleRepresentationList);
     }
 
     /**
      * Updates the credentials of a user in the Keycloak realm.
      *
-     * @param userRepresentation the UserRepresentation object representing the user.
-     * @param password           new password for the user.
+     * @param userResource the UserResource object representing the user.
+     * @param password     new password for the user.
      */
-    public void updateUserCredentials(UserRepresentation userRepresentation, String password) {
+    public void updateUserCredentials(UserResource userResource, String password) {
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
         credentialRepresentation.setTemporary(false);
         credentialRepresentation.setValue(password);
-        userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
+        userResource.resetPassword(credentialRepresentation);
     }
 
     /**
