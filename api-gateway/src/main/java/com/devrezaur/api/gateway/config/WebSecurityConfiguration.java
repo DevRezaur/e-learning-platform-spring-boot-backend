@@ -49,6 +49,11 @@ public class WebSecurityConfiguration {
                 .build();
     }
 
+    /**
+     * Method to configure CORS for client application.
+     *
+     * @return instance of configured CorsConfigurationSource class.
+     */
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("*");
