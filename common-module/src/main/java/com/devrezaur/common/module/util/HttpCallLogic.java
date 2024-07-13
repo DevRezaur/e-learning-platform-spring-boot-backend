@@ -12,7 +12,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,7 +41,6 @@ public class HttpCallLogic {
         this.objectMapper = objectMapper;
     }
 
-    // TODO: Need to refactor this method later
     public ResponseEntity<CustomHttpResponse> executeRequest(CustomHttpRequest customHttpRequest) {
         try {
             HttpMethod methodType = customHttpRequest.getMethodType();
@@ -52,26 +50,22 @@ public class HttpCallLogic {
             HttpEntity<Map<String, ?>> requestEntity = new HttpEntity<>(requestBody, requestHeaders);
             return restTemplate.exchange(url, methodType, requestEntity, CustomHttpResponse.class);
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
-            CustomHttpResponse customHttpResponse = buildErrorResponse(ex.getResponseBodyAsString());
-            return new ResponseEntity<>(customHttpResponse, ex.getStatusCode());
-        } catch (RestClientException ex) {
-
-        } catch (URISyntaxException ex) {
-            systemLogger.error("Exception occurred while building URI!");
+            return handle4xx5xxErrorResponse(ex.getStatusCode(), ex.getResponseBodyAsString());
+        } catch (Exception ex) {
+            systemLogger.error("Error occurred while executing Http request! Reason: " + ex.getCause());
         }
-
         return null;
     }
 
-    // TODO: Need to refactor this method later
-    private CustomHttpResponse buildErrorResponse(String errorBody) {
-        CustomHttpResponse customHttpResponse = null;
+    private ResponseEntity<CustomHttpResponse> handle4xx5xxErrorResponse(HttpStatusCode httpStatusCode,
+                                                                         String errorResponseBody) {
         try {
-            customHttpResponse = objectMapper.readValue(errorBody, CustomHttpResponse.class);
+            CustomHttpResponse customHttpResponse = objectMapper.readValue(errorResponseBody, CustomHttpResponse.class);
+            return new ResponseEntity<>(customHttpResponse, httpStatusCode);
         } catch (JsonProcessingException ex) {
-            systemLogger.error("HttpCallLogic: Exception occurred building error response!");
+            systemLogger.error("Exception occurred while handling 4xx/5xx error response!");
         }
-        return customHttpResponse;
+        return null;
     }
 
     // TODO: Need to refactor this method later
