@@ -10,18 +10,20 @@ import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
 
 public class RequestBuilder {
 
+    private static final String LOADBALANCER_PREFIX = "lb://";
+
     public static CustomHttpRequest buildRequest(HttpMethod methodType, String url,
                                                  Map<String, String> headerParameterMap,
-                                                 Map<String, String> urlParameterMap,
-                                                 Map<String, Object> bodyMap) {
+                                                 Map<String, String> queryParameterMap,
+                                                 Map<String, Object> bodyParameterMap) {
         return CustomHttpRequest
                 .builder()
                 .requestId(MDC.get(REQUEST_ID))
                 .methodType(methodType)
-                .url("lb://" + url)
+                .url(LOADBALANCER_PREFIX + url)
                 .headerParameterMap(headerParameterMap)
-                .urlParameterMap(urlParameterMap)
-                .bodyMap(bodyMap)
+                .queryParameterMap(queryParameterMap)
+                .bodyParameterMap(bodyParameterMap)
                 .build();
     }
 }

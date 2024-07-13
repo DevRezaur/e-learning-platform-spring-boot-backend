@@ -24,8 +24,7 @@ public class ResponseBuilder {
         CustomHttpResponse errorResponse = CustomHttpResponse
                 .builder()
                 .httpStatus(httpStatus)
-                .errorCode(errorCode)
-                .errorMessage(errorMessage)
+                .errorBody(Map.of(errorCode, errorMessage))
                 .build();
         return new ResponseEntity<>(errorResponse, httpStatus);
     }

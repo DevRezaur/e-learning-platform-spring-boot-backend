@@ -16,19 +16,23 @@ import java.util.stream.Collectors;
 
 public class KeycloakRoleConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
+    private static final String REALM_ACCESS = "realm_access";
+    private static final String ROLES = "roles";
+    private static final String ROLE_PREFIX = "ROLE_";
+
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         return new JwtAuthenticationToken(jwt, extractRoles(jwt));
     }
 
     private Collection<GrantedAuthority> extractRoles(Jwt jwt) {
-        Map<String, Object> realmAccess = (Map<String, Object>) jwt.getClaims().get("realm_access");
+        Map<String, Object> realmAccess = (Map<String, Object>) jwt.getClaims().get(REALM_ACCESS);
         if (CollectionUtils.isEmpty(realmAccess)) {
             return new ArrayList<>();
         }
-        return ((List<String>) realmAccess.get("roles"))
+        return ((List<String>) realmAccess.get(ROLES))
                 .stream()
-                .map(roleName -> "ROLE_" + roleName)
+                .map(roleName -> ROLE_PREFIX + roleName)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }

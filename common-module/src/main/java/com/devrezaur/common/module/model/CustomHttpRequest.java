@@ -3,7 +3,6 @@ package com.devrezaur.common.module.model;
 import lombok.*;
 import org.springframework.http.HttpMethod;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -15,7 +14,7 @@ public class CustomHttpRequest {
     private String requestId;
     private HttpMethod methodType;
     private String url;
-    private Map<String, String> headerParameterMap = new HashMap<>();
-    private Map<String, String> urlParameterMap = new HashMap<>();
-    private Map<String, Object> bodyMap;
+    private Map<String, String> headerParameterMap;
+    private Map<String, String> queryParameterMap;
+    private Map<String, Object> bodyParameterMap;
 }
