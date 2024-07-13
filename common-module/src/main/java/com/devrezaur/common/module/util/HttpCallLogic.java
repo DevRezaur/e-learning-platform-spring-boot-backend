@@ -6,10 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -21,8 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 
+import static com.devrezaur.common.module.constant.CommonConstant.CONTENT_TYPE_HEADER_KEY;
 import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
 
 @Component
@@ -123,12 +122,23 @@ public class HttpCallLogic {
         return httpHeaders;
     }
 
-    private MultiValueMap<String, Object> prepareRequestBody(CustomHttpRequest customHttpRequest) {
+    private Map<String, ?> prepareRequestBody(CustomHttpRequest customHttpRequest) {
         Map<String, Object> bodyParameterMap = customHttpRequest.getBodyParameterMap();
         if (bodyParameterMap != null && !bodyParameterMap.isEmpty()) {
-            return prepareMultiValueRequestBody(bodyParameterMap);
+            if (isMultipartFormDataHeaderPresent(customHttpRequest)) {
+                return prepareMultiValueRequestBody(bodyParameterMap);
+            }
+            return bodyParameterMap;
         }
-        return new LinkedMultiValueMap<>();
+        return new HashMap<>();
+    }
+
+    private boolean isMultipartFormDataHeaderPresent(CustomHttpRequest customHttpRequest) {
+        Map<String, String> headerParameterMap = customHttpRequest.getHeaderParameterMap();
+        if (headerParameterMap != null && headerParameterMap.containsKey(CONTENT_TYPE_HEADER_KEY)) {
+            return headerParameterMap.get(CONTENT_TYPE_HEADER_KEY).equals(MediaType.MULTIPART_FORM_DATA_VALUE);
+        }
+        return false;
     }
 
     private MultiValueMap<String, Object> prepareMultiValueRequestBody(Map<String, Object> bodyParameterMap) {
@@ -136,7 +146,6 @@ public class HttpCallLogic {
         for (Map.Entry<String, Object> bodyParameter : bodyParameterMap.entrySet()) {
             if (bodyParameter.getValue() instanceof MultipartFile[] multipartFiles) {
                 for (MultipartFile multipartFile : multipartFiles) {
-                    // TODO: Need to check whether we can replace multipartFile.getResource() with just multipartFile
                     requestBody.add(bodyParameter.getKey(), multipartFile.getResource());
                 }
             } else {
