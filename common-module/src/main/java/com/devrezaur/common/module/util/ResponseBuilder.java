@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
+import static com.devrezaur.common.module.constant.CommonConstant.CODE;
+import static com.devrezaur.common.module.constant.CommonConstant.MESSAGE;
+
 public class ResponseBuilder {
 
     public static ResponseEntity<CustomHttpResponse> buildSuccessResponse(HttpStatus httpStatus,
@@ -24,7 +27,7 @@ public class ResponseBuilder {
         CustomHttpResponse errorResponse = CustomHttpResponse
                 .builder()
                 .httpStatus(httpStatus)
-                .errorBody(Map.of(errorCode, errorMessage))
+                .errorBody(Map.of(CODE, errorCode, MESSAGE, errorMessage))
                 .build();
         return new ResponseEntity<>(errorResponse, httpStatus);
     }

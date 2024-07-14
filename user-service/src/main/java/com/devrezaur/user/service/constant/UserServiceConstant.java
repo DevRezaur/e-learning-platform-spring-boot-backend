@@ -1,7 +1,7 @@
 package com.devrezaur.user.service.constant;
 
 /**
- * Utility class containing the common constants of the application 'user-service'.
+ * Constant class containing the common constants of the application 'user-service'.
  *
  * @author Rezaur Rahman
  */

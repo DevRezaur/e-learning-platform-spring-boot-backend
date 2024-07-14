@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.devrezaur.common.module.constant.CommonConstant.MESSAGE;
 import static com.devrezaur.user.service.constant.UserServiceConstant.ROLE_ADMIN;
 import static com.devrezaur.user.service.constant.UserServiceConstant.ROLE_USER;
 
@@ -65,7 +66,7 @@ public class UserController {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to add user! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", "Successfully added user"));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE, "Successfully added user"));
     }
 
     /**
@@ -91,7 +92,7 @@ public class UserController {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to add admin user! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of("message", "Successfully added admin"));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE, "Successfully added admin"));
     }
 
     /**
@@ -183,7 +184,7 @@ public class UserController {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
                     "Failed to update user information! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message",
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of(MESSAGE,
                 "Successfully updated user information"));
     }
 
@@ -205,7 +206,7 @@ public class UserController {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
                     "Failed to update profile image! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message",
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of(MESSAGE,
                 "Successfully updated profile image"));
     }
 
@@ -231,7 +232,7 @@ public class UserController {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
                     "Failed to update password! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message",
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of(MESSAGE,
                 "Successfully updated password"));
     }
 
