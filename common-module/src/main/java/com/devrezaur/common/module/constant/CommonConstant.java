@@ -21,7 +21,7 @@ public class CommonConstant {
     /**
      * Service specific constants
      */
-    public static final String USER_SERVICE_BASE_URL = "user-service";
+    public static final String USER_API_BASE_URL = "user-service/user";
 
     /**
      * Private constructor to prevent instantiation of this class.

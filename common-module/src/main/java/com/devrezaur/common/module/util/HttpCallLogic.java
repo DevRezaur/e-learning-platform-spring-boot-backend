@@ -29,6 +29,9 @@ import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
 @Component
 public class HttpCallLogic {
 
+    private static final String STATUS = "status";
+    private static final String ERROR = "error";
+    private static final String PATH = "path";
     private static final String QUESTION_SYMBOL = "?";
     private static final String EQUAL_SYMBOL = "=";
     private static final String AND_SYMBOL = "&";
@@ -86,6 +89,14 @@ public class HttpCallLogic {
                                                                          String errorResponseBody) {
         try {
             CustomHttpResponse customHttpResponse = objectMapper.readValue(errorResponseBody, CustomHttpResponse.class);
+            if (customHttpResponse.getHttpStatus() == null || customHttpResponse.getErrorBody() == null) {
+                Map errorBody = objectMapper.readValue(errorResponseBody, Map.class);
+                Integer status = (Integer) errorBody.get(STATUS);
+                String error = (String) errorBody.get(ERROR);
+                String path = (String) errorBody.get(PATH);
+                customHttpResponse.setHttpStatus(HttpStatus.valueOf(status));
+                customHttpResponse.setErrorBody(Map.of(ERROR_CODE, status, ERROR_MESSAGE, error + " - " + path));
+            }
             return new ResponseEntity<>(customHttpResponse, httpStatusCode);
         } catch (JsonProcessingException ex) {
             String errorMessage = "Error occurred while handling 4xx/5xx response! Reason: " + ex.getMessage();
