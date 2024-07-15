@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.devrezaur.common.module.constant.CommonConstant.AUTHORIZATION_HEADER;
+import static com.devrezaur.common.module.constant.CommonConstant.USER_SERVICE_BASE_URL;
 
 @Service
 public class UserAPIService {
@@ -21,6 +22,12 @@ public class UserAPIService {
 
     public UserAPIService(HttpCallLogic httpCallLogic) {
         this.httpCallLogic = httpCallLogic;
+    }
+
+    public Map<String, Object> addRegularUser(Map<String, Object> userData) {
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, USER_SERVICE_BASE_URL +
+                "/user", null, null, userData);
+        return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
     public Map<String, Object> getUserById(UUID userId, String accessToken) throws Exception {
@@ -34,18 +41,6 @@ public class UserAPIService {
         try {
             ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
             return (Map<String, Object>) responseEntity.getBody().getResponseBody().get("user");
-        } catch (Exception ex) {
-            throw new Exception("Error occurred while calling USER-SERVICE!");
-        }
-    }
-
-    public String registerRegularUser(Map<String, Object> userData) throws Exception {
-        String url = "user-service/user";
-        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, null,
-                null, userData);
-        try {
-            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
-            return (String) responseEntity.getBody().getResponseBody().get("message");
         } catch (Exception ex) {
             throw new Exception("Error occurred while calling USER-SERVICE!");
         }

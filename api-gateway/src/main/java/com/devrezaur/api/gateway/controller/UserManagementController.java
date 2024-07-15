@@ -24,13 +24,6 @@ public class UserManagementController {
 
     @PostMapping
     public ResponseEntity<CustomHttpResponse> addRegularUser(@RequestBody Map<String, Object> userData) {
-        String message;
-        try {
-            message = userAPIService.registerRegularUser(userData);
-        } catch (Exception ex) {
-            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
-                    "Failed to add user! Reason: " + ex.getMessage());
-        }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message", message));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, userAPIService.addRegularUser(userData));
     }
 }

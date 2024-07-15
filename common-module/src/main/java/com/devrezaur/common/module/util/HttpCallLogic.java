@@ -1,5 +1,6 @@
 package com.devrezaur.common.module.util;
 
+import com.devrezaur.common.module.exception.ApiException;
 import com.devrezaur.common.module.model.CustomHttpRequest;
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.devrezaur.common.module.constant.CommonConstant.CONTENT_TYPE_HEADER_KEY;
+import static com.devrezaur.common.module.constant.CommonConstant.ERROR_CODE;
+import static com.devrezaur.common.module.constant.CommonConstant.ERROR_MESSAGE;
 import static com.devrezaur.common.module.constant.CommonConstant.REQUEST_ID;
 
 @Component
@@ -41,6 +44,27 @@ public class HttpCallLogic {
         this.objectMapper = objectMapper;
     }
 
+    public Map<String, Object> getHttpResponse(CustomHttpRequest customHttpRequest) {
+        CustomHttpResponse customHttpResponse = executeRequest(customHttpRequest).getBody();
+        if (customHttpResponse != null && customHttpResponse.getResponseBody() != null) {
+            return customHttpResponse.getResponseBody();
+        }
+        return new HashMap<>();
+    }
+
+    public Map<String, Object> getHttpResponseWithException(CustomHttpRequest customHttpRequest) {
+        CustomHttpResponse customHttpResponse = executeRequest(customHttpRequest).getBody();
+        if (customHttpResponse != null && customHttpResponse.getResponseBody() != null) {
+            return customHttpResponse.getResponseBody();
+        } else if (customHttpResponse != null && customHttpResponse.getErrorBody() != null) {
+            HttpStatus httpStatus = customHttpResponse.getHttpStatus();
+            String errorCode = customHttpResponse.getErrorBody().get(ERROR_CODE).toString();
+            String errorMessage = customHttpResponse.getErrorBody().get(ERROR_MESSAGE).toString();
+            throw new ApiException(httpStatus, errorCode, errorMessage);
+        }
+        return new HashMap<>();
+    }
+
     public ResponseEntity<CustomHttpResponse> executeRequest(CustomHttpRequest customHttpRequest) {
         try {
             HttpMethod methodType = customHttpRequest.getMethodType();
@@ -52,9 +76,10 @@ public class HttpCallLogic {
         } catch (HttpClientErrorException | HttpServerErrorException ex) {
             return handle4xx5xxErrorResponse(ex.getStatusCode(), ex.getResponseBodyAsString());
         } catch (Exception ex) {
-            systemLogger.error("Error occurred while executing Http request! Reason: " + ex.getCause());
+            String errorMessage = "Error occurred while executing HTTP request! Reason: " + ex.getMessage();
+            systemLogger.error(errorMessage);
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "500", errorMessage);
         }
-        return null;
     }
 
     private ResponseEntity<CustomHttpResponse> handle4xx5xxErrorResponse(HttpStatusCode httpStatusCode,
@@ -63,9 +88,10 @@ public class HttpCallLogic {
             CustomHttpResponse customHttpResponse = objectMapper.readValue(errorResponseBody, CustomHttpResponse.class);
             return new ResponseEntity<>(customHttpResponse, httpStatusCode);
         } catch (JsonProcessingException ex) {
-            systemLogger.error("Exception occurred while handling 4xx/5xx error response!");
+            String errorMessage = "Error occurred while handling 4xx/5xx response! Reason: " + ex.getMessage();
+            systemLogger.error(errorMessage);
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "500", errorMessage);
         }
-        return null;
     }
 
     // TODO: Need to refactor this method later
