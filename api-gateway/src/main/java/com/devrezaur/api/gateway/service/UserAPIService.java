@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.devrezaur.common.module.constant.CommonConstant.AUTHORIZATION_HEADER;
-import static com.devrezaur.common.module.constant.CommonConstant.USER_SERVICE_BASE_URL;
+import static com.devrezaur.common.module.constant.CommonConstant.USER_API_BASE_URL;
 
 @Service
 public class UserAPIService {
@@ -25,25 +25,17 @@ public class UserAPIService {
     }
 
     public Map<String, Object> addRegularUser(Map<String, Object> userData) {
-        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, USER_SERVICE_BASE_URL +
-                "/user", null, null, userData);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, USER_API_BASE_URL,
+                null, null, userData);
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
-    public Map<String, Object> getUserById(UUID userId, String accessToken) throws Exception {
-        String url = "user-service/user/{userId}";
-        Map<String, String> urlParameterMap = new HashMap<>();
-        urlParameterMap.put("userId", userId.toString());
-        Map<String, String> headerParameterMap = new HashMap<>();
-        headerParameterMap.put(AUTHORIZATION_HEADER, accessToken);
+    public Map<String, Object> getUserById(UUID userId, String accessToken) {
+        String url = USER_API_BASE_URL + "/" + userId.toString();
+        Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
         CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.GET, url, headerParameterMap,
-                urlParameterMap, null);
-        try {
-            ResponseEntity<CustomHttpResponse> responseEntity = httpCallLogic.executeRequest(customHttpRequest);
-            return (Map<String, Object>) responseEntity.getBody().getResponseBody().get("user");
-        } catch (Exception ex) {
-            throw new Exception("Error occurred while calling USER-SERVICE!");
-        }
+                null, null);
+        return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
     public String updateUserData(Map<String, Object> user, String accessToken) throws Exception {
