@@ -5,14 +5,23 @@ import com.devrezaur.common.module.util.ResponseBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<CustomHttpResponse> handle4xxException(Exception ex) {
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<CustomHttpResponse> handleApiException(ApiException ex) {
+        HttpStatus httpStatus = ex.getHttpStatus();
+        String errorCode = ex.getErrorCode();
+        String errorMessage = ex.getErrorMessage();
+        return ResponseBuilder.buildFailureResponse(httpStatus, errorCode, errorMessage);
+    }
+
+    @ExceptionHandler({AccessDeniedException.class, InsufficientAuthenticationException.class})
+    public ResponseEntity<CustomHttpResponse> handleAccessDeniedException(Exception ex) {
         String errorMessage = null;
         if (ex.getMessage() != null) {
             errorMessage = ex.getMessage();
@@ -23,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<CustomHttpResponse> handleException(Exception ex) {
+    public ResponseEntity<CustomHttpResponse> handleUnexpectedException(Exception ex) {
         String errorMessage = null;
         if (ex.getMessage() != null) {
             errorMessage = ex.getMessage();
