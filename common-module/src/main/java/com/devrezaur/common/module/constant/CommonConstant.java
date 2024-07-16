@@ -21,6 +21,7 @@ public class CommonConstant {
     /**
      * Service specific constants
      */
+    public static final String CONTENT_DELIVERY_API_BASE_URL = "content-delivery-service";
     public static final String USER_API_BASE_URL = "user-service/user";
 
     /**
