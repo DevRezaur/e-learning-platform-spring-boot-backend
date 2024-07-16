@@ -33,7 +33,7 @@ public class UserManagementController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.getUserById(userId, accessToken));
     }
 
-    @PostMapping
+    @PostMapping("/profile")
     public ResponseEntity<CustomHttpResponse> updateProfile(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
                                                             @RequestBody Map<String, Object> user) {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.updateUserData(user, accessToken));
