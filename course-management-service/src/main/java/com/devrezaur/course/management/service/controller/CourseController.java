@@ -53,7 +53,7 @@ public class CourseController {
     }
 
     @PostMapping("/courses")
-    public ResponseEntity<CustomHttpResponse> getCourseByIds(@RequestBody Map<String, Object> courseIdsMap) {
+    public ResponseEntity<CustomHttpResponse> getCourseListByIds(@RequestBody Map<String, Object> courseIdsMap) {
         List<Course> courseList;
         try {
             List<UUID> courseIds = ((List<String>) courseIdsMap.get("courseIds")).stream()

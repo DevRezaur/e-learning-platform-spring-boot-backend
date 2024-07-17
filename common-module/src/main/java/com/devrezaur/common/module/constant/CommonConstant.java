@@ -23,6 +23,7 @@ public class CommonConstant {
      */
     public static final String CONTENT_DELIVERY_API_BASE_URL = "content-delivery-service";
     public static final String USER_API_BASE_URL = "user-service/user";
+    public static final String COURSE_MANAGEMENT_API_BASE_URL = "course-management-service/course";
 
     /**
      * Private constructor to prevent instantiation of this class.
