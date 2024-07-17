@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.devrezaur.common.module.constant.CommonConstant.AUTHORIZATION_HEADER;
-import static com.devrezaur.common.module.constant.CommonConstant.COURSE_MANAGEMENT_API_BASE_URL;
+import static com.devrezaur.common.module.constant.CommonConstant.COURSE_API_BASE_URL;
 
 @Service
 public class CourseAPIService {
@@ -24,7 +24,7 @@ public class CourseAPIService {
     }
 
     public Map<String, Object> getCourseById(UUID courseId) {
-        String url = COURSE_MANAGEMENT_API_BASE_URL + "/" + courseId.toString();
+        String url = COURSE_API_BASE_URL + "/" + courseId.toString();
         CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.GET, url, null, null, null);
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
@@ -37,13 +37,13 @@ public class CourseAPIService {
         if (limit != null) {
             queryParameterMap.put("limit", limit.toString());
         }
-        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.GET,
-                COURSE_MANAGEMENT_API_BASE_URL, null, queryParameterMap, null);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.GET, COURSE_API_BASE_URL,
+                null, queryParameterMap, null);
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
     public Map<String, Object> getAllCoursesByIds(List<String> courseIds) {
-        String url = COURSE_MANAGEMENT_API_BASE_URL + "/courses";
+        String url = COURSE_API_BASE_URL + "/courses";
         Map<String, Object> bodyParameterMap = Map.of("courseIds", courseIds);
         CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, null,
                 null, bodyParameterMap);
@@ -52,13 +52,13 @@ public class CourseAPIService {
 
     public Map<String, Object> addNewCourse(Map<String, Object> course, String accessToken) {
         Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
-        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST,
-                COURSE_MANAGEMENT_API_BASE_URL, headerParameterMap, null, course);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, COURSE_API_BASE_URL,
+                headerParameterMap, null, course);
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
     public Map<String, Object> updateCourse(Map<String, Object> course, String accessToken) {
-        String url = COURSE_MANAGEMENT_API_BASE_URL + "/update";
+        String url = COURSE_API_BASE_URL + "/update";
         Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
         CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, headerParameterMap,
                 null, course);

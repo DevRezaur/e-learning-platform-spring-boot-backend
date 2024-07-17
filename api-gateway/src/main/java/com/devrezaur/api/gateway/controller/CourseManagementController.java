@@ -1,7 +1,6 @@
 package com.devrezaur.api.gateway.controller;
 
 import com.devrezaur.api.gateway.service.CourseAPIService;
-import com.devrezaur.api.gateway.service.CourseContentAPIService;
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
 import jakarta.annotation.Nullable;
@@ -19,12 +18,9 @@ import static com.devrezaur.common.module.constant.CommonConstant.AUTHORIZATION_
 public class CourseManagementController {
 
     private final CourseAPIService courseAPIService;
-    private final CourseContentAPIService courseContentAPIService;
 
-    public CourseManagementController(CourseAPIService courseAPIService,
-                                      CourseContentAPIService courseContentAPIService) {
+    public CourseManagementController(CourseAPIService courseAPIService) {
         this.courseAPIService = courseAPIService;
-        this.courseContentAPIService = courseContentAPIService;
     }
 
     @PostMapping
@@ -44,16 +40,6 @@ public class CourseManagementController {
     @GetMapping("/{courseId}")
     public ResponseEntity<CustomHttpResponse> getCourseById(@PathVariable UUID courseId) {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, courseAPIService.getCourseById(courseId));
-    }
-
-    @GetMapping("/{courseId}/preview")
-    public ResponseEntity<CustomHttpResponse> getCoursePreviewById(@PathVariable UUID courseId) {
-        Map<String, Object> courseAPIResponse = courseAPIService.getCourseById(courseId);
-        Map<String, Object> course = (Map<String, Object>) courseAPIResponse.get("course");
-        Map<String, Object> courseContentAPIResponse = courseContentAPIService.getCourseContentsPreview(courseId,
-                null, null);
-        course.putAll(courseContentAPIResponse);
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("coursePreview", course));
     }
 
     @PostMapping("/update")

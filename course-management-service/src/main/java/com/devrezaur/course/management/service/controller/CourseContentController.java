@@ -41,7 +41,7 @@ public class CourseContentController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseContents", courseContents));
     }
 
-    @GetMapping("/preview/{courseId}")
+    @GetMapping("/{courseId}/preview")
     public ResponseEntity<CustomHttpResponse> getCourseContentsPreview(@PathVariable UUID courseId,
                                                                        @RequestParam @Nullable Integer pageNumber,
                                                                        @RequestParam @Nullable Integer limit) {
