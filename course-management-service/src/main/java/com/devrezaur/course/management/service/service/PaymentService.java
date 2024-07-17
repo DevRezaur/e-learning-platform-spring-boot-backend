@@ -33,7 +33,7 @@ public class PaymentService {
         if (existingPaymentInfo != null) {
             throw new Exception("Payment with transaction id - " + paymentInfo.getTrxId() + " already exists!");
         }
-        paymentInfo.setStatus("IN_REVIEW");
+        paymentInfo.setStatus("IN-REVIEW");
         paymentInfoRepository.save(paymentInfo);
     }
 

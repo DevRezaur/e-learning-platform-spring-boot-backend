@@ -8,15 +8,12 @@ import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.devrezaur.common.module.constant.CommonConstant.MESSAGE;
 
 @RestController
 @RequestMapping("/payment")
@@ -35,10 +32,10 @@ public class PaymentController {
             paymentService.savePaymentInfo(paymentInfo);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
-                    "Failed to add payment info! Reason: " + ex.getMessage());
+                    "Failed to save payment info! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED,
-                Map.of("message", "Successfully added payment info"));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE,
+                "Successfully saved payment info"));
     }
 
     @GetMapping
@@ -64,7 +61,7 @@ public class PaymentController {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
                     "Failed to update payment status! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("message",
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of(MESSAGE,
                 "Successfully updated payment status"));
     }
 }

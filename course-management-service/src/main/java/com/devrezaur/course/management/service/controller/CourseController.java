@@ -8,18 +8,13 @@ import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static com.devrezaur.common.module.constant.CommonConstant.MESSAGE;
 
 @RestController
 @RequestMapping("/course")
@@ -40,8 +35,8 @@ public class CourseController {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to add course! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED,
-                Map.of("message", "Successfully added course info"));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE,
+                "Successfully added course info"));
     }
 
     @GetMapping
@@ -63,8 +58,8 @@ public class CourseController {
         try {
             List<UUID> courseIds = ((List<String>) courseIdsMap.get("courseIds")).stream()
                     .map(UUID::fromString)
-                    .collect(Collectors.toList());
-            courseList = courseService.getCourses(courseIds);
+                    .toList();
+            courseList = courseService.getListOfCourse(courseIds);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to fetch course list! Reason: " + ex.getMessage());
@@ -91,7 +86,7 @@ public class CourseController {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to update course! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED,
-                Map.of("message", "Successfully updated course info"));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE,
+                "Successfully updated course info"));
     }
 }

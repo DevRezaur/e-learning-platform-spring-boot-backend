@@ -3,6 +3,7 @@ package com.devrezaur.course.management.service.service;
 import com.devrezaur.course.management.service.model.CourseContent;
 import com.devrezaur.course.management.service.repository.CourseContentRepository;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,18 +22,15 @@ public class CourseContentService {
         this.courseContentRepository = courseContentRepository;
     }
 
-    public List<CourseContent> getAllCourseContents(UUID courseId, Integer pageNumber, Integer limit) {
+    public List<CourseContent> getAllCourseContentsByCourseId(UUID courseId, Integer pageNumber, Integer limit) {
         pageNumber = Optional.ofNullable(pageNumber).orElse(DEFAULT_PAGE_NUMBER);
         limit = Optional.ofNullable(limit).orElse(DEFAULT_LIMIT);
-        PageRequest pageRequest = PageRequest.of(pageNumber, limit);
+        PageRequest pageRequest = PageRequest.of(pageNumber, limit, Sort.by("contentSequence").ascending());
         return courseContentRepository.findByCourseId(courseId, pageRequest);
     }
 
-    public List<CourseContent> getAllCourseContentsPreview(UUID courseId, Integer pageNumber, Integer limit) {
-        pageNumber = Optional.ofNullable(pageNumber).orElse(DEFAULT_PAGE_NUMBER);
-        limit = Optional.ofNullable(limit).orElse(DEFAULT_LIMIT);
-        PageRequest pageRequest = PageRequest.of(pageNumber, limit);
-        List<CourseContent> courseContents = courseContentRepository.findByCourseId(courseId, pageRequest);
+    public List<CourseContent> getAllCourseContentsPreviewByCourseId(UUID courseId, Integer pageNumber, Integer limit) {
+        List<CourseContent> courseContents = getAllCourseContentsByCourseId(courseId, pageNumber, limit);
         courseContents.forEach(courseContent -> {
             courseContent.setContentType(null);
             courseContent.setContentUrl(null);

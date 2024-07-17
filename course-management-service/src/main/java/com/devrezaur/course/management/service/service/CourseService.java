@@ -3,6 +3,7 @@ package com.devrezaur.course.management.service.service;
 import com.devrezaur.course.management.service.model.Course;
 import com.devrezaur.course.management.service.repository.CourseRepository;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class CourseService {
     public List<Course> getAllCourses(Integer pageNumber, Integer limit) {
         pageNumber = Optional.ofNullable(pageNumber).orElse(DEFAULT_PAGE_NUMBER);
         limit = Optional.ofNullable(limit).orElse(DEFAULT_LIMIT);
-        PageRequest pageRequest = PageRequest.of(pageNumber, limit);
+        PageRequest pageRequest = PageRequest.of(pageNumber, limit, Sort.by("createdAt").ascending());
         return courseRepository.findAllBy(pageRequest);
     }
 
@@ -32,7 +33,7 @@ public class CourseService {
         return courseRepository.findByCourseId(courseId);
     }
 
-    public List<Course> getCourses(List<UUID> courseIds) {
+    public List<Course> getListOfCourse(List<UUID> courseIds) {
         return courseRepository.findByCourseIdIn(courseIds);
     }
 
