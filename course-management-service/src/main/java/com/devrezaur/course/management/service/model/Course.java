@@ -1,15 +1,13 @@
 package com.devrezaur.course.management.service.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.Date;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -42,4 +40,8 @@ public class Course {
 
     @Column(name = "discount")
     private Integer discount;
+
+    @CreationTimestamp
+    @Column(name = "published_at", nullable = false, updatable = false)
+    private Date publishedAt;
 }

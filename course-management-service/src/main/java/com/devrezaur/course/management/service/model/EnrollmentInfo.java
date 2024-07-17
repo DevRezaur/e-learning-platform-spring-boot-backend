@@ -13,8 +13,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "course_enrollment_info_table")
-public class CourseEnrollmentInfo {
+@Table(name = "enrollment_info_table")
+public class EnrollmentInfo {
 
     @Id
     @GeneratedValue
