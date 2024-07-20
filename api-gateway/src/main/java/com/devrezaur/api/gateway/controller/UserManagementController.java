@@ -28,7 +28,7 @@ public class UserManagementController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<CustomHttpResponse> getUserData(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
+    public ResponseEntity<CustomHttpResponse> getUserById(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
                                                           @PathVariable UUID userId) {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.getUserById(userId, accessToken));
     }
@@ -40,11 +40,11 @@ public class UserManagementController {
     }
 
     @PostMapping("/image")
-    public ResponseEntity<CustomHttpResponse> updatePhoto(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
+    public ResponseEntity<CustomHttpResponse> updateImageUrl(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
                                                           @RequestBody Map<String, String> imageUrlMap) {
         String userId = imageUrlMap.get("userId");
         String imageUrl = imageUrlMap.get("imageUrl");
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.updateUserPhoto(userId, imageUrl,
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.updateImageUrl(userId, imageUrl,
                 accessToken));
     }
 

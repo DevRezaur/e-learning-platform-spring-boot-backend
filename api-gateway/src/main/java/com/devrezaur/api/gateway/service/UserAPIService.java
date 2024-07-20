@@ -43,7 +43,7 @@ public class UserAPIService {
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
-    public Map<String, Object> updateUserPhoto(String userId, String imageUrl, String accessToken) {
+    public Map<String, Object> updateImageUrl(String userId, String imageUrl, String accessToken) {
         String url = USER_API_BASE_URL + "/image";
         Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
         Map<String, Object> bodyParameterMap = Map.of("userId", userId, "imageUrl", imageUrl);

@@ -33,8 +33,7 @@ public class CourseManagementController {
     @GetMapping
     public ResponseEntity<CustomHttpResponse> getAllCourses(@RequestParam @Nullable Integer pageNumber,
                                                             @RequestParam @Nullable Integer limit) {
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList",
-                courseAPIService.getAllCourses(pageNumber, limit)));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, courseAPIService.getAllCourses(pageNumber, limit));
     }
 
     @GetMapping("/{courseId}")

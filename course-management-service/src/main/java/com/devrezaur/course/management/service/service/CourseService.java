@@ -25,7 +25,7 @@ public class CourseService {
     public List<Course> getAllCourses(Integer pageNumber, Integer limit) {
         pageNumber = Optional.ofNullable(pageNumber).orElse(DEFAULT_PAGE_NUMBER);
         limit = Optional.ofNullable(limit).orElse(DEFAULT_LIMIT);
-        PageRequest pageRequest = PageRequest.of(pageNumber, limit, Sort.by("createdAt").ascending());
+        PageRequest pageRequest = PageRequest.of(pageNumber, limit, Sort.by("publishedAt").ascending());
         return courseRepository.findAllBy(pageRequest);
     }
 
