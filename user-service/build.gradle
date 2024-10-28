@@ -32,7 +32,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
-    testImplementation 'org.wiremock:wiremock:3.2.0'
 }
 
 dependencyManagement {
