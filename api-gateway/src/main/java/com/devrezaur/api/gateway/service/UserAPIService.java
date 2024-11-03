@@ -21,6 +21,13 @@ public class UserAPIService {
         this.httpCallLogic = httpCallLogic;
     }
 
+    public Map<String, Object> login(Map<String, Object> userCredentialsMap) {
+        String url = USER_API_BASE_URL + "/login";
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, null, null,
+                userCredentialsMap);
+        return httpCallLogic.getHttpResponseWithException(customHttpRequest);
+    }
+
     public Map<String, Object> addRegularUser(Map<String, Object> userData) {
         String url = USER_API_BASE_URL + "/register";
         CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, null, null, userData);

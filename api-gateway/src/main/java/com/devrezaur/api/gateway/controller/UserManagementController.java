@@ -22,6 +22,11 @@ public class UserManagementController {
         this.userAPIService = userAPIService;
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<CustomHttpResponse> login(@RequestBody Map<String, Object> userCredentialsMap) {
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.login(userCredentialsMap));
+    }
+
     @PostMapping("/register")
     public ResponseEntity<CustomHttpResponse> addRegularUser(@RequestBody Map<String, Object> userData) {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, userAPIService.addRegularUser(userData));
@@ -41,7 +46,7 @@ public class UserManagementController {
 
     @PostMapping("/image")
     public ResponseEntity<CustomHttpResponse> updateImageUrl(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
-                                                          @RequestBody Map<String, String> imageUrlMap) {
+                                                             @RequestBody Map<String, String> imageUrlMap) {
         String userId = imageUrlMap.get("userId");
         String imageUrl = imageUrlMap.get("imageUrl");
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.updateImageUrl(userId, imageUrl,
