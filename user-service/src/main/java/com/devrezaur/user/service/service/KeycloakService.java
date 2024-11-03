@@ -1,8 +1,10 @@
 package com.devrezaur.user.service.service;
 
+import com.devrezaur.user.service.config.KeycloakConfiguration;
 import com.devrezaur.user.service.model.User;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -31,14 +33,26 @@ public class KeycloakService {
     private String realmName;
 
     private final Keycloak keycloak;
+    private final KeycloakConfiguration keycloakConfiguration;
 
     /**
      * Constructor for KeycloakService class.
      *
-     * @param keycloak instance of the Keycloak client used to interact with the Keycloak server.
+     * @param keycloak              instance of the Keycloak client used to interact with the Keycloak server.
+     * @param keycloakConfiguration instance of Keycloak KeycloakConfiguration.
      */
-    public KeycloakService(Keycloak keycloak) {
+    public KeycloakService(Keycloak keycloak, KeycloakConfiguration keycloakConfiguration) {
         this.keycloak = keycloak;
+        this.keycloakConfiguration = keycloakConfiguration;
+    }
+
+    public AccessTokenResponse login(String username, String password) throws Exception {
+        Keycloak keycloakClient = keycloakConfiguration.getKeycloakClientWithPasswordGrant(username, password);
+        try {
+            return keycloakClient.tokenManager().getAccessToken();
+        } catch (Exception ex) {
+            throw new Exception("Incorrect username or password!");
+        }
     }
 
     /**

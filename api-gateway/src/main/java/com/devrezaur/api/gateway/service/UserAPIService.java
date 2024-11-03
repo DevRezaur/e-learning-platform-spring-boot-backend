@@ -22,8 +22,8 @@ public class UserAPIService {
     }
 
     public Map<String, Object> addRegularUser(Map<String, Object> userData) {
-        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, USER_API_BASE_URL,
-                null, null, userData);
+        String url = USER_API_BASE_URL + "/register";
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, null, null, userData);
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 

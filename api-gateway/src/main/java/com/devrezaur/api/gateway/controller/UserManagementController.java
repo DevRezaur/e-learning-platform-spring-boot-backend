@@ -22,7 +22,7 @@ public class UserManagementController {
         this.userAPIService = userAPIService;
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<CustomHttpResponse> addRegularUser(@RequestBody Map<String, Object> userData) {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, userAPIService.addRegularUser(userData));
     }
