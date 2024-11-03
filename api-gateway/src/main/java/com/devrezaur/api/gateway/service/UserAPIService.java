@@ -50,21 +50,19 @@ public class UserAPIService {
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
-    public Map<String, Object> updateImageUrl(String userId, String imageUrl, String accessToken) {
+    public Map<String, Object> updateImageUrl(Map<String, Object> imageUrlMap, String accessToken) {
         String url = USER_API_BASE_URL + "/image";
         Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
-        Map<String, Object> bodyParameterMap = Map.of("userId", userId, "imageUrl", imageUrl);
         CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, headerParameterMap,
-                null, bodyParameterMap);
+                null, imageUrlMap);
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
-    public Map<String, Object> updatePassword(String userId, String password, String accessToken) {
+    public Map<String, Object> updatePassword(Map<String, Object> passwordMap, String accessToken) {
         String url = USER_API_BASE_URL + "/password";
         Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
-        Map<String, Object> bodyParameterMap = Map.of("userId", userId, "password", password);
         CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, headerParameterMap,
-                null, bodyParameterMap);
+                null, passwordMap);
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 }

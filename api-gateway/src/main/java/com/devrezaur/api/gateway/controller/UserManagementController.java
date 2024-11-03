@@ -46,19 +46,15 @@ public class UserManagementController {
 
     @PostMapping("/image")
     public ResponseEntity<CustomHttpResponse> updateImageUrl(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
-                                                             @RequestBody Map<String, String> imageUrlMap) {
-        String userId = imageUrlMap.get("userId");
-        String imageUrl = imageUrlMap.get("imageUrl");
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.updateImageUrl(userId, imageUrl,
+                                                             @RequestBody Map<String, Object> imageUrlMap) {
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.updateImageUrl(imageUrlMap,
                 accessToken));
     }
 
     @PostMapping("/password")
     public ResponseEntity<CustomHttpResponse> updatePassword(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
-                                                             @RequestBody Map<String, String> passwordMap) {
-        String userId = passwordMap.get("userId");
-        String password = passwordMap.get("password");
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.updatePassword(userId, password,
+                                                             @RequestBody Map<String, Object> passwordMap) {
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.updatePassword(passwordMap,
                 accessToken));
     }
 }
