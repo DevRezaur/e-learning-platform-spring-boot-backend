@@ -26,7 +26,7 @@ public class Course {
     @Column(name = "course_name")
     private String courseName;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "image_url")
