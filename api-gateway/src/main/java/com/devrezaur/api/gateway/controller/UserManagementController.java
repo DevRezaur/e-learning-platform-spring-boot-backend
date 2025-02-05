@@ -22,11 +22,6 @@ public class UserManagementController {
         this.userAPIService = userAPIService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<CustomHttpResponse> login(@RequestBody Map<String, Object> userCredentialsMap) {
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, userAPIService.login(userCredentialsMap));
-    }
-
     @PostMapping("/register")
     public ResponseEntity<CustomHttpResponse> addRegularUser(@RequestBody Map<String, Object> userData) {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, userAPIService.addRegularUser(userData));
