@@ -42,14 +42,17 @@ public class CourseController {
     @GetMapping
     public ResponseEntity<CustomHttpResponse> getAllCourses(@RequestParam @Nullable Integer pageNumber,
                                                             @RequestParam @Nullable Integer limit) {
+        Long totalCount;
         List<Course> courseList;
         try {
+            totalCount = courseService.getTotalCourseCount();
             courseList = courseService.getAllCourses(pageNumber, limit);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to fetch course list! Reason: " + ex.getMessage());
         }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("totalCount", totalCount,
+                "courseList", courseList));
     }
 
     @PostMapping("/courses")

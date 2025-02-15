@@ -14,6 +14,7 @@ public class PaymentService {
 
     private static final Integer DEFAULT_PAGE_NUMBER = 0;
     private static final Integer DEFAULT_LIMIT = 50;
+    private static final String IN_REVIEW_STATUS = "IN_REVIEW";
 
     private final PaymentInfoRepository paymentInfoRepository;
 
@@ -33,7 +34,7 @@ public class PaymentService {
         if (existingPaymentInfo != null) {
             throw new Exception("Payment with transaction id - " + paymentInfo.getTrxId() + " already exists!");
         }
-        paymentInfo.setStatus("IN-REVIEW");
+        paymentInfo.setStatus(IN_REVIEW_STATUS);
         paymentInfoRepository.save(paymentInfo);
     }
 

@@ -22,6 +22,10 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
+    public Long getTotalCourseCount() {
+        return courseRepository.count();
+    }
+
     public List<Course> getAllCourses(Integer pageNumber, Integer limit) {
         pageNumber = Optional.ofNullable(pageNumber).orElse(DEFAULT_PAGE_NUMBER);
         limit = Optional.ofNullable(limit).orElse(DEFAULT_LIMIT);
