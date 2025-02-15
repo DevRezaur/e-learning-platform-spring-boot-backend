@@ -30,13 +30,13 @@ public class CourseController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CustomHttpResponse> addCourse(@RequestBody Course course) {
         try {
-            courseService.addCourse(course);
+            course = courseService.addCourse(course);
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to add course! Reason: " + ex.getMessage());
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE,
-                "Successfully added course info"));
+                "Successfully added course info", "course", course));
     }
 
     @GetMapping

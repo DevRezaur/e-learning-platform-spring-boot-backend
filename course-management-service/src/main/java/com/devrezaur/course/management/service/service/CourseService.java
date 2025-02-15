@@ -41,12 +41,12 @@ public class CourseService {
         return courseRepository.findByCourseIdIn(courseIds);
     }
 
-    public void addCourse(Course course) throws Exception {
+    public Course addCourse(Course course) throws Exception {
         Course existingCourse = courseRepository.findByCourseId(course.getCourseId());
         if (existingCourse != null) {
             throw new Exception("Course with id - " + course.getCourseId() + " already exists!");
         }
-        courseRepository.save(course);
+        return courseRepository.save(course);
     }
 
     public void updateCourse(Course course) throws Exception {
