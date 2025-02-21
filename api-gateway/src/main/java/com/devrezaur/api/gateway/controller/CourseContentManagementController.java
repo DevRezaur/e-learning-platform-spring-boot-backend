@@ -47,4 +47,11 @@ public class CourseContentManagementController {
                 courseContent, accessToken));
     }
 
+    @DeleteMapping("/{contentId}")
+    public ResponseEntity<CustomHttpResponse> addCourseContent(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
+                                                               @PathVariable UUID contentId) {
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, courseContentAPIService.deleteCourseContent(
+                contentId, accessToken));
+    }
+
 }

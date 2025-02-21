@@ -65,4 +65,12 @@ public class CourseContentService {
         courseContentRepository.save(existingCourseContent);
     }
 
+    public void deleteCourseContent(UUID contentId) throws Exception {
+        CourseContent existingCourseContent = courseContentRepository.findByContentId(contentId);
+        if (existingCourseContent == null) {
+            throw new Exception("Course content with id - " + contentId + " not found!");
+        }
+        courseContentRepository.deleteById(contentId);
+    }
+
 }

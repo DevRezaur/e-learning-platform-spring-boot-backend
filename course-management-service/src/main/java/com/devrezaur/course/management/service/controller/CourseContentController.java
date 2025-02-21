@@ -69,4 +69,17 @@ public class CourseContentController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE,
                 "Successfully added course content"));
     }
+
+    @DeleteMapping("/{contentId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CustomHttpResponse> deleteCourseContent(@PathVariable UUID contentId) {
+        try {
+            courseContentService.deleteCourseContent(contentId);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
+                    "Failed to delete course content! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE,
+                "Successfully deleted course content"));
+    }
 }
