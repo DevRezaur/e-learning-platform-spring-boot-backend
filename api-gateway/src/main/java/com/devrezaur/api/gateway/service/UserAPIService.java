@@ -35,6 +35,13 @@ public class UserAPIService {
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
+    public Map<String, Object> getAllRegularUser(String accessToken) {
+        Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.GET, USER_API_BASE_URL,
+                headerParameterMap, null, null);
+        return httpCallLogic.getHttpResponseWithException(customHttpRequest);
+    }
+
     public Map<String, Object> updateUserData(Map<String, Object> user, String accessToken) {
         String url = USER_API_BASE_URL + "/profile";
         Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);

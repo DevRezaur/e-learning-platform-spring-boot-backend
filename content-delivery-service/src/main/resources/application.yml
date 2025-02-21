@@ -7,6 +7,10 @@ content:
 spring:
   application:
     name: content-delivery-service
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
   security:
     oauth2:
       resourceserver:

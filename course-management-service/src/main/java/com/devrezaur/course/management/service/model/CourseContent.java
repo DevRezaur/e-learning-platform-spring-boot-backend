@@ -34,5 +34,5 @@ public class CourseContent {
     private String contentUrl;
 
     @Column(name = "content_sequence")
-    private String contentSequence;
+    private Integer contentSequence;
 }

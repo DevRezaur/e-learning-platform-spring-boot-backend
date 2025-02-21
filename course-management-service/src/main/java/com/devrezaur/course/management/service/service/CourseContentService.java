@@ -43,6 +43,13 @@ public class CourseContentService {
     }
 
     public void addCourseContent(CourseContent courseContent) {
+        UUID courseId = courseContent.getCourseId();
+        Integer contentSequence = courseContent.getContentSequence();
+        if (courseContent.getContentSequence() == null) {
+            Integer lastContentSequence = courseContentRepository.findTopByCourseIdOrderByContentSequenceDesc(courseId);
+            contentSequence = lastContentSequence != null ? ++lastContentSequence : 1;
+        }
+        courseContent.setContentSequence(contentSequence);
         courseContentRepository.save(courseContent);
     }
 
