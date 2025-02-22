@@ -1,3 +1,7 @@
 networks:
-  application:
+  application-network:
     driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local

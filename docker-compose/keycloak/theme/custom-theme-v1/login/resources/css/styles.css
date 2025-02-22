@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+:root {
+    --white: #ffffff;
+    --off-white: #f5f5f5;
+    --black: #303030;
+    --gray: #cecece;
+    --accent: #fc5c7d;
+}
+
+body {
+    height: auto;
+    overflow-x: hidden;
+    font-family: Roboto, serif;
+}
+
+.login-pf body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 0;
+    background: var(--off-white);
+}
+
+.login-pf-page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#kc-header .logo img {
+    width: 200px;
+}
+
+#kc-header-wrapper {
+    display: none;
+}
+
+.card-pf {
+    width: 100%;
+    max-width: 500px;
+    box-shadow: none;
+}
+
+.login-pf-page .login-pf-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 2rem;
+    margin-bottom: 20px;
+}
+
+.login-pf-settings {
+    align-items: center;
+}
+
+.pf-c-button.pf-m-primary {
+    margin-top: 15px;
+    background-color: var(--black);
+}
+
+.pf-c-button.pf-m-primary:hover {
+    background-color: var(--accent);
+}
+
+@media (max-width: 750px) {
+    .login-pf body {
+        padding: 20px 0 0 0;
+        background-color: var(--white);
+    }
+
+    #kc-header {
+        margin-bottom: 0;
+    }
+}
