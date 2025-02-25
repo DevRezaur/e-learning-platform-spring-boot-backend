@@ -20,6 +20,8 @@ import static com.devrezaur.common.module.constant.CommonConstant.MESSAGE;
 @RequestMapping("/payment")
 public class PaymentController {
 
+    private static final String IN_REVIEW_STATUS = "IN-REVIEW";
+
     private final PaymentService paymentService;
     private final EnrollmentService enrollmentService;
 
@@ -32,7 +34,10 @@ public class PaymentController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CustomHttpResponse> savePaymentInfo(@RequestBody PaymentInfo paymentInfo) {
         try {
+            paymentInfo.setStatus(IN_REVIEW_STATUS);
             paymentService.savePaymentInfo(paymentInfo);
+            enrollmentService.enrollToCourse(paymentInfo.getCourseId(), paymentInfo.getUserId(),
+                    paymentInfo.getStatus());
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
                     "Failed to save payment info! Reason: " + ex.getMessage());
