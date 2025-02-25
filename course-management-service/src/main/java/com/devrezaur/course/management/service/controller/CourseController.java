@@ -4,6 +4,7 @@ import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
 import com.devrezaur.course.management.service.model.Course;
 import com.devrezaur.course.management.service.service.CourseService;
+import com.devrezaur.course.management.service.service.EnrollmentService;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,11 @@ import static com.devrezaur.common.module.constant.CommonConstant.MESSAGE;
 public class CourseController {
 
     private final CourseService courseService;
+    private final EnrollmentService enrollmentService;
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, EnrollmentService enrollmentService) {
         this.courseService = courseService;
+        this.enrollmentService = enrollmentService;
     }
 
     @PostMapping
@@ -55,21 +58,6 @@ public class CourseController {
                 "courseList", courseList));
     }
 
-    @PostMapping("/courses")
-    public ResponseEntity<CustomHttpResponse> getCourseListByIds(@RequestBody Map<String, Object> courseIdsMap) {
-        List<Course> courseList;
-        try {
-            List<UUID> courseIds = ((List<String>) courseIdsMap.get("courseIds")).stream()
-                    .map(UUID::fromString)
-                    .toList();
-            courseList = courseService.getListOfCourse(courseIds);
-        } catch (Exception ex) {
-            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
-                    "Failed to fetch course list! Reason: " + ex.getMessage());
-        }
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("courseList", courseList));
-    }
-
     @GetMapping("/{courseId}")
     public ResponseEntity<CustomHttpResponse> getCourseById(@PathVariable UUID courseId) {
         Course course = courseService.getCourseByCourseId(courseId);
@@ -91,5 +79,18 @@ public class CourseController {
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE,
                 "Successfully updated course info"));
+    }
+
+    @GetMapping("/enrollment/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.principal.subject")
+    public ResponseEntity<CustomHttpResponse> getAllEnrolledCourses(@PathVariable UUID userId) {
+        List<Course> enrolledCourseList;
+        try {
+            enrolledCourseList = enrollmentService.getEnrolledCourses(userId);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to fetch enrolled course list with status! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("enrolledCourseList", enrolledCourseList));
     }
 }

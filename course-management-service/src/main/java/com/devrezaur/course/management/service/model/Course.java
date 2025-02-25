@@ -1,5 +1,6 @@
 package com.devrezaur.course.management.service.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,6 +35,10 @@ public class Course {
 
     @Column(name = "is_enrollment_enabled")
     private Boolean isEnrollmentEnabled;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Transient
+    private String enrollmentStatus;
 
     @Column(name = "course_fee")
     private Integer courseFee;
