@@ -42,12 +42,11 @@ public class PaymentAPIService {
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
-    public Map<String, Object> updatePaymentStatus(String trxId, String status, String accessToken) {
+    public Map<String, Object> updatePaymentStatus(Map<String, Object> paymentInfo, String accessToken) {
         String url = COURSE_PAYMENT_API_BASE_URL + "/approval";
         Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
-        Map<String, Object> bodyParameterMap = Map.of("trxId", trxId, "status", status);
         CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, headerParameterMap,
-                null, bodyParameterMap);
+                null, paymentInfo);
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 }

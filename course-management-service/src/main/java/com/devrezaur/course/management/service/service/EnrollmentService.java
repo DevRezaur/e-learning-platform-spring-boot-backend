@@ -18,13 +18,15 @@ public class EnrollmentService {
         this.enrollmentRepository = enrollmentRepository;
     }
 
-    public void enrollToCourse(EnrollmentInfo enrollmentInfo) {
-        EnrollmentInfo existingEnrollmentInfo = enrollmentRepository.findByCourseIdAndUserId(
-                enrollmentInfo.getCourseId(), enrollmentInfo.getUserId());
-        if (existingEnrollmentInfo != null) {
-            existingEnrollmentInfo.setStatus(enrollmentInfo.getStatus());
+    public void enrollToCourse(UUID courseId, UUID userId, String status) {
+        EnrollmentInfo existingEnrollmentInfo = enrollmentRepository.findByCourseIdAndUserId(courseId, userId);
+        if (existingEnrollmentInfo == null) {
+            existingEnrollmentInfo = new EnrollmentInfo();
+            existingEnrollmentInfo.setCourseId(courseId);
+            existingEnrollmentInfo.setUserId(userId);
         }
-        enrollmentRepository.save(enrollmentInfo);
+        existingEnrollmentInfo.setStatus(status);
+        enrollmentRepository.save(existingEnrollmentInfo);
     }
 
     public Map<UUID, String> getEnrolledCourseIdsWithStatus(UUID userId) {

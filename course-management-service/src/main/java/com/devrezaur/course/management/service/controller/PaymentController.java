@@ -3,6 +3,7 @@ package com.devrezaur.course.management.service.controller;
 import com.devrezaur.common.module.model.CustomHttpResponse;
 import com.devrezaur.common.module.util.ResponseBuilder;
 import com.devrezaur.course.management.service.model.PaymentInfo;
+import com.devrezaur.course.management.service.service.EnrollmentService;
 import com.devrezaur.course.management.service.service.PaymentService;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,11 @@ import static com.devrezaur.common.module.constant.CommonConstant.MESSAGE;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final EnrollmentService enrollmentService;
 
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(PaymentService paymentService, EnrollmentService enrollmentService) {
         this.paymentService = paymentService;
+        this.enrollmentService = enrollmentService;
     }
 
     @PostMapping
@@ -54,9 +57,11 @@ public class PaymentController {
 
     @PostMapping("/approval")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CustomHttpResponse> updatePaymentStatus(@RequestBody Map<String, String> paymentStatusMap) {
+    public ResponseEntity<CustomHttpResponse> updatePaymentStatus(@RequestBody PaymentInfo paymentInfo) {
         try {
-            paymentService.updatePaymentStatus(paymentStatusMap.get("trxId"), paymentStatusMap.get("status"));
+            paymentService.updatePaymentStatus(paymentInfo.getTrxId(), paymentInfo.getStatus());
+            enrollmentService.enrollToCourse(paymentInfo.getCourseId(), paymentInfo.getUserId(),
+                    paymentInfo.getStatus());
         } catch (Exception ex) {
             return ResponseBuilder.buildFailureResponse(HttpStatus.EXPECTATION_FAILED, "417",
                     "Failed to update payment status! Reason: " + ex.getMessage());

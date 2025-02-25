@@ -14,7 +14,7 @@ public class PaymentService {
 
     private static final Integer DEFAULT_PAGE_NUMBER = 0;
     private static final Integer DEFAULT_LIMIT = 50;
-    private static final String IN_REVIEW_STATUS = "IN_REVIEW";
+    private static final String IN_REVIEW_STATUS = "IN-REVIEW";
 
     private final PaymentInfoRepository paymentInfoRepository;
 

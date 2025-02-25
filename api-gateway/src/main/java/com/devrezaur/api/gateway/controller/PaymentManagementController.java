@@ -39,10 +39,8 @@ public class PaymentManagementController {
 
     @PostMapping("/approval")
     public ResponseEntity<CustomHttpResponse> approvePayment(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
-                                                             @RequestBody Map<String, String> paymentStatusMap) {
-        String trxId = paymentStatusMap.get("trxId");
-        String status = paymentStatusMap.get("status");
-        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, paymentAPIService.updatePaymentStatus(trxId, status,
+                                                             @RequestBody Map<String, Object> paymentInfo) {
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, paymentAPIService.updatePaymentStatus(paymentInfo,
                 accessToken));
     }
 }
