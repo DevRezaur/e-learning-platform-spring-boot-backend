@@ -27,6 +27,12 @@ public class UserManagementController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, userAPIService.addRegularUser(userData));
     }
 
+    @PostMapping("/init")
+    public ResponseEntity<CustomHttpResponse> initUser(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
+                                                       @RequestBody Map<String, Object> userData) {
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, userAPIService.initUser(userData, accessToken));
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<CustomHttpResponse> getUserById(@RequestHeader(AUTHORIZATION_HEADER) String accessToken,
                                                           @PathVariable UUID userId) {

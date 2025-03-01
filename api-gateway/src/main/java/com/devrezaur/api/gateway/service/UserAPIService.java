@@ -27,6 +27,14 @@ public class UserAPIService {
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
 
+    public Map<String, Object> initUser(Map<String, Object> userData, String accessToken) {
+        String url = USER_API_BASE_URL + "/init";
+        Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.POST, url, headerParameterMap,
+                null, userData);
+        return httpCallLogic.getHttpResponseWithException(customHttpRequest);
+    }
+
     public Map<String, Object> getUserById(UUID userId, String accessToken) {
         String url = USER_API_BASE_URL + "/" + userId.toString();
         Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
