@@ -10,6 +10,10 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: update
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:import.sql
   datasource:
     url: jdbc:postgresql://localhost:5432/course_management_service_db
     driver-class-name: org.postgresql.Driver
