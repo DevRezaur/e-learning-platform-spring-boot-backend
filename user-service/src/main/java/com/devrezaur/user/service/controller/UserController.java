@@ -114,6 +114,22 @@ public class UserController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("user", user));
     }
 
+    @PostMapping("/init")
+    @PreAuthorize("#user.userId.toString() == authentication.principal.subject")
+    public ResponseEntity<CustomHttpResponse> initUser(@RequestBody User user) {
+        try {
+            User existingUser = userService.getUser(user.getUserId());
+            if (existingUser == null) {
+                userService.addUser(user);
+            }
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.BAD_REQUEST, "400",
+                    "Failed to initialize user data! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, Map.of(MESSAGE,
+                "Successfully initialized user data"));
+    }
+
     /**
      * API to list all the user with role 'USER'.
      * <p>
