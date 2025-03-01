@@ -93,4 +93,18 @@ public class CourseController {
         }
         return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("enrolledCourseList", enrolledCourseList));
     }
+
+    @GetMapping("/enrollment/{courseId}/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or #userId.toString() == authentication.principal.subject")
+    public ResponseEntity<CustomHttpResponse> getEnrollmentStatus(@PathVariable UUID courseId,
+                                                                  @PathVariable UUID userId) {
+        String status;
+        try {
+            status = enrollmentService.getEnrollmentStatus(courseId, userId);
+        } catch (Exception ex) {
+            return ResponseBuilder.buildFailureResponse(HttpStatus.NOT_FOUND, "404",
+                    "Failed to fetch enrollment status! Reason: " + ex.getMessage());
+        }
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, Map.of("status", status));
+    }
 }

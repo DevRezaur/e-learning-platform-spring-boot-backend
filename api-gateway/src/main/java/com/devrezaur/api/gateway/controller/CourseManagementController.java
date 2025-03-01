@@ -54,4 +54,12 @@ public class CourseManagementController {
         return ResponseBuilder.buildSuccessResponse(HttpStatus.CREATED, courseAPIService.getAllEnrolledCourses(userId,
                 accessToken));
     }
+
+    @GetMapping("/enrollment/{courseId}/{userId}")
+    public ResponseEntity<CustomHttpResponse> getEnrollmentStatus(@RequestHeader(AUTHORIZATION_HEADER)
+                                                                  String accessToken, @PathVariable UUID courseId,
+                                                                  @PathVariable UUID userId) {
+        return ResponseBuilder.buildSuccessResponse(HttpStatus.OK, courseAPIService.getEnrollmentStatus(courseId,
+                userId, accessToken));
+    }
 }

@@ -43,6 +43,14 @@ public class EnrollmentService {
         return enrolledCourses;
     }
 
+    public String getEnrollmentStatus(UUID courseId, UUID userId) throws Exception {
+        EnrollmentInfo existingEnrollmentInfo = enrollmentRepository.findByCourseIdAndUserId(courseId, userId);
+        if (existingEnrollmentInfo == null) {
+            throw new Exception("No enrollment info found for user id - " + userId + " and course id - " + courseId);
+        }
+        return existingEnrollmentInfo.getStatus();
+    }
+
     public List<UUID> getEnrolledUserIds(UUID courseId) {
         List<EnrollmentInfo> courseEnrollmentInfoList = enrollmentRepository.findByCourseId(courseId);
         return courseEnrollmentInfoList.stream().map(EnrollmentInfo::getUserId).toList();

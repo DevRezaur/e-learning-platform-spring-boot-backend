@@ -64,4 +64,12 @@ public class CourseAPIService {
                 null, null);
         return httpCallLogic.getHttpResponseWithException(customHttpRequest);
     }
+
+    public Map<String, Object> getEnrollmentStatus(UUID courseId, UUID userId, String accessToken) {
+        String url = COURSE_API_BASE_URL + "/enrollment/" + courseId.toString() + "/" + userId.toString();
+        Map<String, String> headerParameterMap = Map.of(AUTHORIZATION_HEADER, accessToken);
+        CustomHttpRequest customHttpRequest = RequestBuilder.buildRequest(HttpMethod.GET, url, headerParameterMap,
+                null, null);
+        return httpCallLogic.getHttpResponseWithException(customHttpRequest);
+    }
 }
