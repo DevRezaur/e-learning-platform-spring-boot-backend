@@ -27,12 +27,15 @@ services:
     image: postgres:${POSTGRES_VERSION}
     container_name: postgres-server
     restart: always
+    ports:
+      - "5433:5432"
     environment:
       - POSTGRES_DB=keycloak
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
     networks:
       - application-network
 

@@ -15,7 +15,7 @@ spring:
       mode: always
       data-locations: classpath:import.sql
   datasource:
-    url: jdbc:postgresql://localhost:5432/course_management_service_db
+    url: jdbc:postgresql://localhost:5433/course_management_service_db
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: root
