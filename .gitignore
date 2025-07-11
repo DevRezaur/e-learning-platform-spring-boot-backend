@@ -42,5 +42,4 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-### Log Files ###
 *.log
